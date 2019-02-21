@@ -1,5 +1,7 @@
 const app = require('express')()
 
-app.use('/api/test', (req, res) => res.send('hello, world!'))
+const { withBaseUrl } = require('./util')
+
+app.use(withBaseUrl('/api/test'), require('./api/test'))
 
 module.exports = app
