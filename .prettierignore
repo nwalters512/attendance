@@ -1,0 +1,7 @@
+/coverage/
+/node_modules/
+/src/.next/
+package.json
+package-lock.json
+CHANGELOG.md
+README.md
