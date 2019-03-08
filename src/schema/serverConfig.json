@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Backend Config",
+  "description": "A configuration file for the Attendance server.",
+  "type": "object",
+  "properties": {
+    "postgresqlUser": {
+      "description": "The user for connecting to the PostgreSQL database.",
+      "type": "string"
+    },
+    "postgresqlDatabase": {
+      "description": "The database for connecting to the PostgreSQL database.",
+      "type": "string"
+    },
+    "postgresqlHost": {
+      "description": "The host for connecting to the PostgreSQL database.",
+      "type": "string"
+    }
+  }
+}
