@@ -6,6 +6,7 @@ CREATE TABLE "Student" (
        college         varchar(160),
        level           smallserial,
        netid           varchar(40),
+       email           varchar(80),
        firstName       varchar(80),
        lastName        varchar(80),
        preferredName   varchar(160),
