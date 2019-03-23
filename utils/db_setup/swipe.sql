@@ -1,4 +1,5 @@
 CREATE TABLE "Swipe"(
+       id           serial,
        time         serial,
        stu_email    varchar(80) REFERENCES "Student"(email),
        meeting_name varchar(80) REFERENCES "SectionMeeting"(m_name),

@@ -1,5 +1,6 @@
 CREATE TABLE "Meeting" (
-       name  varchar(80),
+       id       serial,
+       name     varchar(80),
        ci_term  char(4) REFERENCES "CourseInstance"(term),
        ci_name  varchar(80) REFERENCES "CourseInstance"(name),
        ci_year  shortserial REFERENCES "CourseInstance"(year),

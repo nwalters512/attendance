@@ -1,4 +1,5 @@
 CREATE TABLE "Student" (
+       id              serial,
        UIN             bigserial,
        ci_term         char(4) REFERENCES "CourseInstance"(term),
        ci_name         varchar(80) REFERENCES "CourseInstance"(name),
