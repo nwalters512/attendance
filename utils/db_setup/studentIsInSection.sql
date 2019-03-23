@@ -1,7 +1,7 @@
 CREATE TABLE "studentIsInSection"(
        id        serial,
-       start     serial,
-       UIN       bigserial REFERENCES "Student"(UIN),
-       end       serial,
+       start     integer,
+       UIN       bigint REFERENCES "Student"(UIN),
+       end       integer,
        PRIMARY KEY(start, UIN)
 );
