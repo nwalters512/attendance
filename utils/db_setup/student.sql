@@ -1,9 +1,9 @@
 CREATE TABLE "Student" (
        id              serial,
        UIN             bigint,
-       ci_term         char(4) REFERENCES "CourseInstance"(term),
-       ci_name         varchar(80) REFERENCES "CourseInstance"(name),
-       ci_year         smallint REFERENCES "CourseInstance"(year),
+       ci_term         char(4),
+       ci_name         varchar(80),
+       ci_year         smallint,
        college         varchar(160),
        level           smallint,
        netid           varchar(40),
@@ -14,5 +14,6 @@ CREATE TABLE "Student" (
        year            smallint,
        major           varchar(40),
        credits         smallint,
-       PRIMARY KEY(UIN, ci_term, ci_name, ci_year)
+       PRIMARY KEY(UIN, ci_term, ci_name, ci_year, email),
+       FOREIGN KEY(ci_term, ci_name, ci_year) REFERENCES "CourseInstance"(term, name, year)
 );
