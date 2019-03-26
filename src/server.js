@@ -1,20 +1,17 @@
 const { Server } = require('http')
-const next = require('next')
-const co = require('co')
-
-const app = require('./app')
-const routes = require('./routes')
+const express = require('express')
+const nunjucks = require('nunjucks')
+const path = require('path')
 
 const PORT = process.env.PORT || 3000
 const DEV = ['production'].indexOf(process.env.NODE_ENV) === -1
 
-const nextApp = next({ dev: DEV, dir: 'src' })
-const handler = routes.getRequestHandler(nextApp)
+const app = express()
+app.set('views', path.join(__dirname, 'pages'))
+app.set('view engine', 'ejs')
 
-co(function*() {
-  yield nextApp.prepare()
-  const server = Server(app)
-  app.use(handler)
-  server.listen(PORT)
-  console.info(`Listening on ${PORT}`)
-}).catch(e => console.error(e))
+app.use('/', require('./pages/home/home'))
+
+const server = Server(app)
+server.listen(PORT)
+console.info(`Listening on ${PORT}`)
