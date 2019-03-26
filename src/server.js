@@ -1,6 +1,5 @@
 const { Server } = require('http')
 const express = require('express')
-const nunjucks = require('nunjucks')
 const path = require('path')
 
 const PORT = process.env.PORT || 3000
