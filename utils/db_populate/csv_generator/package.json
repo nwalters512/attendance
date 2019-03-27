@@ -1,0 +1,28 @@
+{
+  "name": "csv_generator",
+  "version": "1.0.0",
+  "description": "Generator for CSVs that represent data for relations in the database",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nwalters512/attendance.git"
+  },
+  "keywords": [
+    "csv",
+    "relations",
+    "generator"
+  ],
+  "author": "Rahul Rameshbabu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nwalters512/attendance/issues"
+  },
+  "homepage": "https://github.com/nwalters512/attendance#readme",
+  "dependencies": {
+    "csv-writer": "^1.2.0",
+    "foswig": "^1.1.1"
+  }
+}
