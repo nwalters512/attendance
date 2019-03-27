@@ -4,6 +4,10 @@ const path = require('path')
 const bodyParser = require('body-parser')
 
 const logger = require('./logger')
+const sqlLoader = require('@prairielearn/prairielib/sql-loader')
+const sqlDB = require('@prairielearn/prairielib/sql-db')
+
+const initDB = function(initSqlArray) {}
 
 const PORT = process.env.PORT || 3000
 

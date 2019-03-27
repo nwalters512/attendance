@@ -10,6 +10,22 @@ config.postgresqlPassword = null
 config.postgresqlDatabase = 'attendance'
 config.postgresqlHost = 'localhost'
 
+config.sqlInitFiles = [
+  ['course', 'courseInstance', 'user'],
+  [
+    'meeting',
+    'section',
+    'student',
+    'isOwner',
+    'isCourseInstance',
+    'userAssistsCourseInstance',
+    'studentIsUser',
+    'studentIsInSection',
+  ],
+  ['sectionMeeting'],
+  ['swipe'],
+]
+
 config.loadConfig = function(file) {
   if (fs.existsSync(file)) {
     let fileConfig = jsonLoad.readJSONSyncOrDie(
