@@ -15,38 +15,31 @@ const pgConf = {
   database: config.postgresqlDatabase,
 }
 
-const logError = function(err) {
-  if (err) {
-    console.error('Error due to dbDriver', err.stack)
-  }
-}
-
-sqlDB.init(pgConf, logError, logError)
-
-dbDriver.initDB = function() {
-  var sqlPath_ = config.sqlFilePath
-  var sqlInitFiles_ = config.sqlInitFiles
-  var initFileList_ = []
-  sqlInitFiles_.forEach(files => {
-    files.forEach(file => {
-      initFileList_.push(file)
-    })
-  })
-  var initHelper = fList => {
-    if (fList.length === 0) {
-      logger.info('Finished initializing database')
-      return
+dbDriver.initDB = function(callback, idleErrCb) {
+  sqlDB.init(pgConf, idleErrCb, err => {
+    if (err) {
+      return callback ? callback(err) : null
     }
-    var initFile_ = sqlPath_ + fList[0] + '.sql'
-    var initSql_ = sqlLoader.loadSqlEquiv(initFile_)
-    sqlDB.query(initSql_['all'], {}, err => {
-      if (err) logError(err)
-      initHelper(fList.slice(1))
-    })
-  }
-  initHelper(initFileList_)
-}
 
-dbDriver.query = sqlDB.query
-dbDriver.queryOneRow = sqlDB.queryOneRow
-dbDriver.queryWithZeroOrOneRow = sqlDB.queryWithZeroOrOneRow
+    var sqlPath_ = config.sqlFilePath
+    var sqlInitFiles_ = config.sqlInitFiles
+    var initFileList_ = []
+    sqlInitFiles_.forEach(files => {
+      files.forEach(file => {
+        initFileList_.push(file)
+      })
+    })
+    var initHelper = fList => {
+      if (fList.length === 0) {
+        return callback ? callback(null) : null
+      }
+      var initFile_ = sqlPath_ + fList[0] + '.sql'
+      var initSql_ = sqlLoader.loadSqlEquiv(initFile_)
+      sqlDB.query(initSql_['all'], {}, err => {
+        if (err) return callback ? callback(err) : null
+        initHelper(fList.slice(1))
+      })
+    }
+    initHelper(initFileList_)
+  })
+}
