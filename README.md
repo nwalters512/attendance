@@ -25,4 +25,10 @@ For example,
 psql <normal-postgres-args> -a -f utils/db_setup/dbInit.sql
 ```
 
+Example of `<normal-postgres-args>`
+
+```
+-U attendance-adm -d attendance
+```
+
 To populate the newly created database with tables, simply run the webapp as explained in `Getting Started`.
