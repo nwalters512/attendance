@@ -18,14 +18,14 @@ const meetings = [
   },
 ]
 
-router.get('/', (req, res, next) => {
+router.get('/', (req, res, _next) => {
   res.locals.courseInstanceId = req.params.courseInstanceId
   res.locals.sections = sections
   res.locals.meetings = meetings
   res.render(__filename.replace(/\.js/, '.ejs'), res.locals)
 })
 
-router.post('/', (req, res, next) => {
+router.post('/', (req, res, _next) => {
   if (req.body.__action === 'newSection') {
     const section = {
       name: req.body.name,

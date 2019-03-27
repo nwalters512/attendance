@@ -23,7 +23,7 @@ router.post('/', (req, res, next) => {
       next(new Error(`Invalid course number: ${req.body.number}`))
       return
     }
-    sqlDb.query(sql.insert_course, params, (err, result) => {
+    sqlDb.query(sql.insert_course, params, err => {
       if (ERR(err, next)) return
       res.redirect(req.originalUrl)
     })
