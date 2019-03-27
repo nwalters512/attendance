@@ -13,8 +13,9 @@ config.postgresqlPort = 5432
 config.sqlFilePath = path.join('utils', 'db_setup/')
 
 config.sqlInitFiles = [
-  ['course', 'courseInstance', 'user'],
+  ['course', 'user'],
   [
+    'courseInstance',
     'meeting',
     'section',
     'student',
