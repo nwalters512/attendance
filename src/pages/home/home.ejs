@@ -5,6 +5,44 @@
   </head>
   <body>
     <%- include('../partials/header') %>
-    <h1>hello, world!</h1>
+    <div class="container">
+      <h1>Courses</h1>
+      <button
+        role="button"
+        class="btn btn-primary mb-3"
+        data-toggle="collapse"
+        data-target="#newCourse"
+        role="button"
+        aria-expanded="false"
+        aria-controls="newCourse"
+      >
+        New Course
+      </button>
+      <div class="collapse" id="newCourse">
+        <div class="card card-body mb-3">
+          <form method="POST">
+            <input type="hidden" name="__action" value="newCourse">
+            <div class="form-group">
+              <label for="courseName">Name</label>
+              <input class="form-control" name="name" id="courseName" placeholder="Data Structures">
+            </div>
+            <div class="form-group">
+              <label for="courseDept">Department</label>
+              <input class="form-control" name="dept" id="courseDept" placeholder="CS">
+            </div>
+            <div class="form-group">
+              <label for="courseNumber">Number</label>
+              <input class="form-control" name="number" id="courseNumber" type="number" placeholder="225">
+            </div>
+            <button type="submit" class="btn btn-primary">Create course</button>
+          </form>
+        </div>
+      </div>
+      <ul class="list-group">
+        <% courses.forEach(function(course) { %>
+        <li class="list-group-item"><%= course.name %></li>
+        <% }) %>
+      </ul>
+    </div>
   </body>
 </html>

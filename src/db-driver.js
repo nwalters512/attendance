@@ -18,8 +18,7 @@ dbDriver.initDB = (callback, idleErrCb) => {
   sqlDB.init(pgConf, idleErrCb, err => {
     if (ERR(err, callback)) return
 
-    const sqlPath = config.sqlFilePath
-    const { sqlInitFiles } = config
+    const { sqlInitFiles, sqlFilePath } = config
     const initFileList = []
     sqlInitFiles.forEach(files => {
       files.forEach(file => {
@@ -30,10 +29,15 @@ dbDriver.initDB = (callback, idleErrCb) => {
       if (fList.length === 0) {
         if (ERR(err, callback)) return
         callback(null)
+        return
       }
-      const initFile = path.join(sqlPath, `${fList[0]}.sql`)
+      const initFile = path.join(sqlFilePath, `${fList[0]}.sql`)
       const initSql = sqlLoader.loadSqlEquiv(initFile)
       sqlDB.query(initSql.all, {}, queryErr => {
+        if (queryErr) {
+          // eslint-disable-next-line no-param-reassign
+          queryErr.message += ` (file: ${initFile}`
+        }
         if (ERR(queryErr, callback)) return
         initHelper(fList.slice(1))
       })
