@@ -1,7 +1,6 @@
-var _ = require('lodash')
-var fs = require('fs')
+const path = require('path')
 
-var config = module.exports
+const config = module.exports
 
 config.PORT = process.env.PORT || 3000
 
@@ -11,7 +10,7 @@ config.postgresqlDatabase = 'attendance'
 config.postgresqlHost = 'localhost'
 config.postgresqlPort = 5432
 
-config.sqlFilePath = 'utils/db_setup/'
+config.sqlFilePath = path.join('utils', 'db_setup/')
 
 config.sqlInitFiles = [
   ['course', 'courseInstance', 'user'],
