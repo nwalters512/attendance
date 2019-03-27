@@ -1,4 +1,4 @@
-CREATE TABLE "userAssistsCourseInstance"(
+CREATE TABLE IF NOT EXISTS "userAssistsCourseInstance"(
        id       serial,
        email    varchar(80) REFERENCES "User"(email),
        ci_term  char(4),

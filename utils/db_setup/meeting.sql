@@ -1,4 +1,4 @@
-CREATE TABLE "Meeting" (
+CREATE TABLE IF NOT EXISTS "Meeting" (
        id       serial,
        name     varchar(80),
        ci_term  char(4),

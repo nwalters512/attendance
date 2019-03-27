@@ -1,4 +1,4 @@
-CREATE TABLE "CourseInstance" (
+CREATE TABLE IF NOT EXISTS "CourseInstance" (
        id    serial,
        term  char(4),
        name  varchar(80),

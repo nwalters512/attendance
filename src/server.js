@@ -4,12 +4,8 @@ const path = require('path')
 const bodyParser = require('body-parser')
 
 const logger = require('./logger')
-const sqlLoader = require('@prairielearn/prairielib/sql-loader')
-const sqlDB = require('@prairielearn/prairielib/sql-db')
-
-const initDB = function(initSqlArray) {}
-
-const PORT = process.env.PORT || 3000
+const config = require('./lib/config.js')
+const dbDriver = require('./db-driver')
 
 const app = express()
 app.set('views', path.join(__dirname, 'pages'))
@@ -25,5 +21,6 @@ app.use(
 )
 
 const server = Server(app)
-server.listen(PORT)
-logger.info(`Listening on ${PORT}`)
+server.listen(config.PORT)
+dbDriver.initDB()
+logger.info(`Listening on ${config.PORT}`)

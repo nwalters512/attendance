@@ -1,4 +1,4 @@
-CREATE TABLE "studentIsUser"(
+CREATE TABLE IF NOT EXISTS "studentIsUser"(
        id           serial,
        UIN          bigint,
        stu_ci_term  char(4),

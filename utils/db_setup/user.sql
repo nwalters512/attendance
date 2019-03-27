@@ -1,4 +1,4 @@
-CREATE TABLE "User" (
+CREATE TABLE IF NOT EXISTS "User" (
        id           serial,
        email        varchar(80) CONSTRAINT userpk PRIMARY KEY,
        password     varchar(80),
