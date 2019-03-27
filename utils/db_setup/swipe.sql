@@ -1,4 +1,4 @@
-CREATE TABLE "Swipe"(
+CREATE TABLE IF NOT EXISTS "Swipe"(
        id           serial,
        time         integer,
        UIN          bigint,

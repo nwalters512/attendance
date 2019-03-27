@@ -1,4 +1,4 @@
-CREATE TABLE "studentIsInSection"(
+CREATE TABLE IF NOT EXISTS "studentIsInSection"(
        id        serial,
        startTime integer,
        UIN       bigint,

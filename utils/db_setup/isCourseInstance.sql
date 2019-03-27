@@ -1,4 +1,4 @@
-CREATE TABLE "isCourseInstanceOf"(
+CREATE TABLE IF NOT EXISTS "isCourseInstanceOf"(
        id       serial,
        course_name     varchar(120) REFERENCES "Course"(name),
        ci_term  char(4),

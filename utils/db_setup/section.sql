@@ -1,4 +1,4 @@
-CREATE TABLE "Section" (
+CREATE TABLE IF NOT EXISTS "Section" (
        id       serial,
        name     varchar(80),
        ci_term  char(4),

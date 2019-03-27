@@ -1,4 +1,4 @@
-CREATE TABLE "Course" (
+CREATE TABLE IF NOT EXISTS "Course" (
        id             serial,
        name           varchar(120) CONSTRAINT coursekey PRIMARY KEY,
        dept           varchar(60),

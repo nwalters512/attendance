@@ -4,8 +4,8 @@ const path = require('path')
 const bodyParser = require('body-parser')
 
 const logger = require('./logger')
-
-const PORT = process.env.PORT || 3000
+const config = require('./lib/config.js')
+const dbDriver = require('./db-driver')
 
 const app = express()
 app.set('views', path.join(__dirname, 'pages'))
@@ -21,5 +21,14 @@ app.use(
 )
 
 const server = Server(app)
-server.listen(PORT)
-logger.info(`Listening on ${PORT}`)
+dbDriver.initDB(
+  err => {
+    if (err) return logger.Error('DB initialization failed.')
+    logger.info('Finished DB initialization.')
+    server.listen(config.PORT)
+    logger.info(`Listening on ${config.PORT}`)
+  },
+  err => {
+    if (err) return logger.Error('DB initialization failed due to idle error.')
+  }
+)

@@ -1,4 +1,4 @@
-CREATE TABLE "SectionMeeting" (
+CREATE TABLE IF NOT EXISTS "SectionMeeting" (
        id                     serial,
        m_name                 varchar(80),
        m_ci_term              char(4),
