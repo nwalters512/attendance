@@ -23,12 +23,17 @@ app.use(
 const server = Server(app)
 dbDriver.initDB(
   err => {
-    if (err) return logger.Error('DB initialization failed.')
+    if (err) {
+      logger.Error('DB initialization failed.')
+      return
+    }
     logger.info('Finished DB initialization.')
     server.listen(config.PORT)
     logger.info(`Listening on ${config.PORT}`)
   },
   err => {
-    if (err) return logger.Error('DB initialization failed due to idle error.')
+    if (err) {
+      logger.Error('DB initialization failed due to idle error.')
+    }
   }
 )

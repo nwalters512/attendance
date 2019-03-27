@@ -1,7 +1,4 @@
-var _ = require('lodash')
-var fs = require('fs')
-
-var config = module.exports
+const config = module.exports
 
 config.PORT = process.env.PORT || 3000
 
