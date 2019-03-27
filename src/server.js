@@ -14,7 +14,11 @@ app.use(bodyParser.urlencoded({ extended: false, limit: 200 * 1024 }))
 app.use(bodyParser.json())
 
 app.use('/', require('./pages/home/home'))
-app.use('/course', require('./pages/course/course'))
+app.use('/course/:courseId', require('./pages/course/course'))
+app.use(
+  '/courseInstance/:courseInstanceId',
+  require('./pages/courseInstance/courseInstance')
+)
 
 const server = Server(app)
 server.listen(PORT)
