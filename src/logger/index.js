@@ -4,9 +4,9 @@ const chalk = require('chalk')
 const { format } = winston
 
 const outputFormat = format.printf(info => {
-  let message = `${chalk.bold(`[${info.timestamp}]`)} ${chalk.bold(
-    info.level
-  )}: ${info.message}`
+  const timestamp = chalk.bold(`[${info.timestamp}]`)
+  const level = chalk.bold(info.level)
+  let message = `${timestamp} ${level}: ${info.message}`
   if (info.stack) {
     message += `\n${info.stack}`
   }
