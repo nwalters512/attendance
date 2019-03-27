@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/nwalters512/attendance#readme",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "winston": "^3.2.1"

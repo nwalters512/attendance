@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('../partials/head') %>
+  </head>
+  <body>
+    <%- include('../partials/header') %>
+    <div class="container">
+      <h1>Course <%= courseId %></h1>
+      <h2>Sections</h2>
+      <button
+        role="button"
+        class="btn btn-primary mb-3"
+        data-toggle="collapse"
+        data-target="#newSection"
+        role="button"
+        aria-expanded="false"
+        aria-controls="newSection"
+      >
+        New Section
+      </button>
+      <div class="collapse" id="newSection">
+        <div class="card card-body mb-3">
+          <form method="POST">
+            <input type="hidden" name="__action" value="newSection">
+            <div class="form-group">
+              <label for="sectionName">Name</label>
+              <input class="form-control" name="name" id="sectionName">
+            </div>
+            <button type="submit" class="btn btn-primary">Create section</button>
+          </form>
+        </div>
+      </div>
+      <ul class="list-group mb-4">
+        <% sections.forEach(function(section) { %>
+        <li class="list-group-item"><%= section.name %></li>
+        <% }) %>
+      </ul>
+      <h2>Meetings</h2>
+      <button
+        role="button"
+        class="btn btn-primary mb-3"
+        data-toggle="collapse"
+        data-target="#newMeeting"
+        role="button"
+        aria-expanded="false"
+        aria-controls="newMeeting"
+      >
+        New Meeting
+      </button>
+      <div class="collapse" id="newMeeting">
+        <div class="card card-body mb-3">
+          <form method="POST">
+            <input type="hidden" name="__action" value="newMeeting">
+            <div class="form-group">
+              <label for="meetingName">Name</label>
+              <input class="form-control" name="name" id="meetingName">
+            </div>
+            <button type="submit" class="btn btn-primary">Create meeting</button>
+          </form>
+        </div>
+      </div>
+      <ul class="list-group mb-4">
+        <% meetings.forEach(function(meeting) { %>
+        <li class="list-group-item"><%= meeting.name %></li>
+        <% }) %>
+      </ul>
+    </div>
+  </body>
+</html>

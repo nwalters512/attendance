@@ -23,5 +23,6 @@ module.exports = {
       },
     ],
     'react-hooks/rules-of-hooks': 'error',
+    'no-underscore-dangle': ['off'],
   },
 }
