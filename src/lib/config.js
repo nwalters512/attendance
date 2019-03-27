@@ -19,7 +19,6 @@ config.sqlInitFiles = [
     'section',
     'student',
     'isOwner',
-    'isCourseInstance',
     'userAssistsCourseInstance',
     'studentIsUser',
     'studentIsInSection',
