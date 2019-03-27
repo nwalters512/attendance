@@ -27,6 +27,14 @@ router.post('/', (req, res, next) => {
       if (ERR(err, next)) return
       res.redirect(req.originalUrl)
     })
+  } else if (req.body.__action === 'deleteCourse') {
+    const params = {
+      id: req.body.id,
+    }
+    sqlDb.query(sql.delete_course, params, err => {
+      if (ERR(err, next)) return
+      res.redirect(req.originalUrl)
+    })
   } else {
     res.redirect(req.originalUrl)
   }

@@ -21,18 +21,34 @@
       <div class="collapse" id="newCourse">
         <div class="card card-body mb-3">
           <form method="POST">
-            <input type="hidden" name="__action" value="newCourse">
+            <input type="hidden" name="__action" value="newCourse" />
             <div class="form-group">
               <label for="courseName">Name</label>
-              <input class="form-control" name="name" id="courseName" placeholder="Data Structures">
+              <input
+                class="form-control"
+                name="name"
+                id="courseName"
+                placeholder="Data Structures"
+              />
             </div>
             <div class="form-group">
               <label for="courseDept">Department</label>
-              <input class="form-control" name="dept" id="courseDept" placeholder="CS">
+              <input
+                class="form-control"
+                name="dept"
+                id="courseDept"
+                placeholder="CS"
+              />
             </div>
             <div class="form-group">
               <label for="courseNumber">Number</label>
-              <input class="form-control" name="number" id="courseNumber" type="number" placeholder="225">
+              <input
+                class="form-control"
+                name="number"
+                id="courseNumber"
+                type="number"
+                placeholder="225"
+              />
             </div>
             <button type="submit" class="btn btn-primary">Create course</button>
           </form>
@@ -40,8 +56,18 @@
       </div>
       <div class="list-group">
         <% courses.forEach(function(course) { %>
-        <a href="/course/<%= course.id %>" class="list-group-item">
+        <a
+          href="/course/<%= course.id %>"
+          class="list-group-item d-flex justify-content-between align-items-center"
+        >
           <%= course.dept %> <%= course.number %> (<%= course.name %>)
+          <form method="POST">
+            <input type="hidden" name="__action" value="deleteCourse" />
+            <input type="hidden" name="id" value="<%= course.id %>" />
+            <button type="submit">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </form>
         </a>
         <% }) %>
       </div>
