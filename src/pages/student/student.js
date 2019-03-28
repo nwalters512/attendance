@@ -19,7 +19,7 @@ router.post('/', (req, res, next) => {
       lName: req.body.lastName,
       id: req.body.id,
     }
-    sqlDb.query(sql.update_student, params, (err, result) => {
+    sqlDb.query(sql.update_student, params, (err, _result) => {
       if (ERR(err, next)) return
       res.redirect(req.originalUrl)
     })
