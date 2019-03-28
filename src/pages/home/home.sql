@@ -8,4 +8,4 @@ VALUES
   ($name, $dept, $number);
 
 -- BLOCK delete_course
-DELETE FROM courses WHERE id = $id;
+DELETE FROM courses WHERE id = $id CASCADE;
