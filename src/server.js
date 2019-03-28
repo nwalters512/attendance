@@ -14,6 +14,7 @@ app.use(bodyParser.urlencoded({ extended: false, limit: 200 * 1024 }))
 app.use(bodyParser.json())
 
 app.use('/', require('./pages/home/home'))
+app.use('/student', require('./pages/student/student'))
 app.use('/course/:courseId', require('./pages/course/course'))
 app.use(
   '/courseInstance/:courseInstanceId',
