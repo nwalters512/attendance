@@ -19,12 +19,12 @@ router.get('/', (req, res, next) => {
       sqlDb.query(
         sql.select_course_instances,
         { course_name: courseRow.name },
-        (err, result) => {
-          if (ERR(err, next)) return
+        (errCI, resultCI) => {
+          if (ERR(errCI, next)) return
           res.locals.courseDept = courseRow.dept
           res.locals.courseNumber = courseRow.number
           res.locals.courseName = courseRow.name
-          res.locals.course_instances = result.rows
+          res.locals.course_instances = resultCI.rows
           res.render(__filename.replace(/\.js$/, '.ejs'), res.locals)
         }
       )
@@ -54,8 +54,8 @@ router.post('/', (req, res, next) => {
           next(new Error(`Invalid year: ${req.body.year}`))
           return
         }
-        sqlDb.query(sql.insert_course_instance, params, err => {
-          if (ERR(err, next)) return
+        sqlDb.query(sql.insert_course_instance, params, errIns => {
+          if (ERR(errIns, next)) return
           res.redirect(req.originalUrl)
         })
       }

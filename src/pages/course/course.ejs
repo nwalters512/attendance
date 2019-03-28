@@ -24,21 +24,21 @@
             <input type="hidden" name="__action" value="newCourseInstance" />
             <input type="hidden" name="courseId" value="<%= courseId %>" />
             <div class="form-group">
-              <label for="courseInstanceTerm">Term</label>
-              <input
-                class="form-control"
-                name="term"
-                id="courseInstanceTerm"
-                placeholder="Sp19"
-              />
-            </div>
-            <div class="form-group">
               <label for="courseInstanceName">Name</label>
               <input
                 class="form-control"
                 name="name"
                 id="courseInstanceName"
                 placeholder="CS 225 Sp19"
+              />
+            </div>
+            <div class="form-group">
+              <label for="courseInstanceTerm">Term</label>
+              <input
+                class="form-control"
+                name="term"
+                id="courseInstanceTerm"
+                placeholder="Spring"
               />
             </div>
             <div class="form-group">
@@ -61,7 +61,7 @@
           href="/courseInstance/<%= course_inst.id %>"
           class="list-group-item d-flex justify-content-between align-items-center"
         >
-          <%= course_inst.name %> <%= course_inst.term %> (<%= course_inst.year %>)
+          <%= course_inst.name %>
         </a>
         <% }) %>
       </div>

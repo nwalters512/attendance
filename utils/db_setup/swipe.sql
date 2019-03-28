@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS swipes (
   id           serial,
   time         integer,
   UIN          bigint,
-  stu_ci_term  char(4),
+  stu_ci_term  char(6),
   stu_ci_name  varchar(80),
   stu_ci_year  smallint,
   meeting_name varchar(80),
