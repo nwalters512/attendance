@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS meetings (
   id       serial,
   name     varchar(80),
-  ci_term  char(4),
+  ci_term  char(6),
   ci_name  varchar(80),
   ci_year  smallint,
   PRIMARY KEY (name, ci_term, ci_name, ci_year),

@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS sections (
   id       serial,
   name     varchar(80),
-  ci_term  char(4),
+  ci_term  char(6),
   ci_name  varchar(80),
   ci_year  smallint,
   CRN      integer,
