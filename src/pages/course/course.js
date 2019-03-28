@@ -14,8 +14,14 @@ router.post('/', (req, res, next) => {
     if (req.body.___action === 'newCourseInstance') {
         const params = {
             term: req.body.term,
-            name: req.body.
+            name: ,
+            year: Number.parseInt(req.body.year, 10),
         }
+        if (Number.isNaN(params.year)) {
+          next(new Error(`Invalid year: ${req.body.year}`))
+          return
+        }
+        sqlDb.query()
     }
 })
 
