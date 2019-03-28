@@ -19,6 +19,12 @@ app.use(
   '/courseInstance/:courseInstanceId',
   require('./pages/courseInstance/courseInstance')
 )
+app.use('/section/:sectionId', require('./pages/section/section'))
+app.use('/meeting/:meetingId', require('./pages/meeting/meeting'))
+app.use(
+  '/sectionMeeting/:sectionMeetingId',
+  require('./pages/sectionMeeting/sectionMeeting')
+)
 
 const server = Server(app)
 dbDriver.initDB(
