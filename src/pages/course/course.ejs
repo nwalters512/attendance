@@ -7,6 +7,17 @@
     <%- include('../partials/header') %>
     <div class="container">
       <h1>Course <%= courseId %></h1>
+      <button
+          role="button"
+          class="btn btn-primary mb-3"
+          data-toggle="collapse"
+          data-target="#newCourseInstance"
+          role="button"
+          aria-expanded="false"
+          aria-controls="newCourseInstance"
+      >
+          New Course Instance
+      </button>
       <h2>Course Instances</h2>
       <ul class="list-group">
         <li class="list-group-item">I am an instance</li>
