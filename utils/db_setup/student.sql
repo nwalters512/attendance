@@ -15,5 +15,5 @@ CREATE TABLE IF NOT EXISTS students (
   major           varchar(40),
   credits         smallint,
   PRIMARY KEY (UIN, ci_term, ci_name, ci_year),
-  FOREIGN KEY (ci_term, ci_name, ci_year) REFERENCES course_instances (term, name, year)
+  FOREIGN KEY (ci_term, ci_name, ci_year) REFERENCES course_instances (term, name, year) ON DELETE CASCADE
 );

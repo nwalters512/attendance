@@ -17,6 +17,7 @@ router.post('/', (req, res, next) => {
     const params = {
       fName: req.body.firstName,
       lName: req.body.lastName,
+      major: req.body.major,
       id: req.body.id,
     }
     sqlDb.query(sql.update_student, params, (err, _result) => {
