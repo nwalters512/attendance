@@ -77,7 +77,10 @@ router.post('/', (req, res, next) => {
         }
         sqlDb.query(sql.insert_sections, params, errIns => {
           if (ERR(errIns, next)) return
-          res.redirect(req.originalUrl)
+          sqlDb.query(sql.insert_sections_sm, params, errSm => {
+            if (ERR(errSm, next)) return
+            res.redirect(req.originalUrl)
+          })
         })
       }
     )
@@ -104,7 +107,10 @@ router.post('/', (req, res, next) => {
         }
         sqlDb.query(sql.insert_meetings, params, errIns => {
           if (ERR(errIns, next)) return
-          res.redirect(req.originalUrl)
+          sqlDb.query(sql.insert_meetings_sm, params, errSm => {
+            if (ERR(errSm, next)) return
+            res.redirect(req.originalUrl)
+          })
         })
       }
     )
