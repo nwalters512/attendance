@@ -9,3 +9,6 @@ INSERT INTO course_instances
     (term, name, year, course_name)
 VALUES
     ($term, $name, $year, $course_name);
+
+-- BLOCK select_course_join_course_instance
+SELECT * FROM courses INNER JOIN course_instances ON (courses.name = course_instances.course_name) WHERE (courses.id = $courseId);

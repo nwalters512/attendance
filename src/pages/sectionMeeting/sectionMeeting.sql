@@ -6,6 +6,13 @@ SELECT * FROM swipes
 WHERE meeting_name = $mname
 AND sec_name = $sname;
 
+-- BLOCK select_swipes_join_section_meetings
+SELECT * FROM swipes RIGHT OUTER JOIN section_meetings
+ON (swipes.meeting_name = section_meetings.m_name AND
+swipes.sec_name = section_meetings.s_name)
+WHERE (section_meetings.id = $sectionMeetingId);
+
+
 -- BLOCK insert_students
 INSERT INTO students
     (UIN, ci_term, ci_name, ci_year)

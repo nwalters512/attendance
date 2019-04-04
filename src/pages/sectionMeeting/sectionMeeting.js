@@ -7,29 +7,21 @@ const sql = sqlLoader.loadSqlEquiv(__filename)
 router.get('/', (req, res, next) => {
   res.locals.sectionMeetingId = req.params.sectionMeetingId
   sqlDb.query(
-    sql.select_section_meetings,
+    sql.select_swipes_join_section_meetings,
     { sectionMeetingId: req.params.sectionMeetingId },
+
     (err, result) => {
       if (ERR(err, next)) return
       if (result.rows.length === 0) {
-        res.redirect(req.originalUrl)
+        ERR(new Error('No results found from query.'), next)
         return
       }
+
       const secMeetingRow = result.rows[0]
-      sqlDb.query(
-        sql.select_swipes,
-        {
-          mname: secMeetingRow.m_name,
-          sname: secMeetingRow.s_name,
-        },
-        (errSM, resultSM) => {
-          if (ERR(errSM, next)) return
-          res.locals.sectionName = secMeetingRow.s_name
-          res.locals.meetingName = secMeetingRow.m_name
-          res.locals.swipes = resultSM.rows
-          res.render(__filename.replace(/\.js$/, '.ejs'), res.locals)
-        }
-      )
+      res.locals.sectionName = secMeetingRow.s_name
+      res.locals.meetingName = secMeetingRow.m_name
+      res.locals.swipes = result.rows
+      res.render(__filename.replace(/\.js$/, '.ejs'), res.locals)
     }
   )
 })

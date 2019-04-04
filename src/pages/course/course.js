@@ -7,27 +7,22 @@ const sql = sqlLoader.loadSqlEquiv(__filename)
 router.get('/', (req, res, next) => {
   res.locals.courseId = req.params.courseId
   sqlDb.query(
-    sql.select_course,
+    sql.select_course_join_course_instance,
     { courseId: req.params.courseId },
+
     (err, result) => {
       if (ERR(err, next)) return
       if (result.rows.length === 0) {
         res.redirect(req.originalUrl)
         return
       }
+
       const courseRow = result.rows[0]
-      sqlDb.query(
-        sql.select_course_instances,
-        { course_name: courseRow.name },
-        (errCI, resultCI) => {
-          if (ERR(errCI, next)) return
-          res.locals.courseDept = courseRow.dept
-          res.locals.courseNumber = courseRow.number
-          res.locals.courseName = courseRow.name
-          res.locals.course_instances = resultCI.rows
-          res.render(__filename.replace(/\.js$/, '.ejs'), res.locals)
-        }
-      )
+      res.locals.courseDept = courseRow.dept
+      res.locals.courseNumber = courseRow.number
+      res.locals.courseName = courseRow.name
+      res.locals.course_instances = result.rows
+      res.render(__filename.replace(/\.js$/, '.ejs'), res.locals)
     }
   )
 })

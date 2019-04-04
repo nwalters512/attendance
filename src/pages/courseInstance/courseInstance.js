@@ -4,46 +4,42 @@ const { sqlDb, sqlLoader } = require('@prairielearn/prairielib')
 
 const sql = sqlLoader.loadSqlEquiv(__filename)
 
+// MODED CODE BELOW
 router.get('/', (req, res, next) => {
   res.locals.courseInstanceId = req.params.courseInstanceId
+  // TODO: BROKEN - Sequential queriess require async
   sqlDb.query(
-    sql.select_course_instances,
+    sql.select_sections_join_course_instances,
     { instId: req.params.courseInstanceId },
-    (err, result) => {
-      if (ERR(err, next)) return
-      if (result.rows.length === 0) {
+
+    (errSec, resultSec) => {
+      if (ERR(errSec, next)) return
+      if (resultSec.rows.length === 0) {
         res.redirect(req.originalUrl)
         return
       }
-      const instRow = result.rows[0]
+
+      const instRow = resultSec.rows[0]
       res.locals.instTerm = instRow.term
       res.locals.instName = instRow.name
       res.locals.instYear = instRow.year
-      sqlDb.query(
-        sql.select_sections,
-        {
-          ciTerm: instRow.term,
-          ciName: instRow.name,
-          ciYear: instRow.year,
-        },
-        (errSec, resultSec) => {
-          if (ERR(errSec, next)) return
-          res.locals.sections = resultSec.rows
-          sqlDb.query(
-            sql.select_meetings,
-            {
-              ciTerm: instRow.term,
-              ciName: instRow.name,
-              ciYear: instRow.year,
-            },
-            (errMeet, resultMeet) => {
-              if (ERR(errMeet, next)) return
-              res.locals.meetings = resultMeet.rows
-              res.render(__filename.replace(/\.js/, '.ejs'), res.locals)
-            }
-          )
-        }
-      )
+      res.locals.sections = resultSec.rows
+    }
+  )
+
+  sqlDb.query(
+    sql.select_meetings_join_course_instances,
+    { instId: req.params.courseInstanceId },
+
+    (errMeet, resultMeet) => {
+      if (ERR(errMeet, next)) return
+      if (resultMeet.rows.length === 0) {
+        res.redirect(req.originalUrl)
+        return
+      }
+
+      res.locals.meetings = resultMeet.rows
+      res.render(__filename.replace(/\.js/, '.ejs'), res.locals)
     }
   )
 })
