@@ -14,14 +14,14 @@ AND ci_name = $ciName
 AND ci_year = $ciYear;
 
 -- BLOCK select_sections_join_course_instances
-SELECT * FROM course_instances INNER JOIN sections
+SELECT * FROM course_instances LEFT OUTER JOIN sections
 ON (sections.ci_name = course_instances.name AND
 sections.ci_term = course_instances.term AND
 sections.ci_year = course_instances.year)
 WHERE (course_instances.id = $instId);
 
 -- BLOCK select_meetings_join_course_instances
-SELECT * FROM course_instances INNER JOIN meetings
+SELECT * FROM course_instances LEFT OUTER JOIN meetings
 ON (meetings.ci_name = course_instances.name AND
 meetings.ci_term = course_instances.term AND
 meetings.ci_year = course_instances.year)
