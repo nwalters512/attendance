@@ -2,7 +2,7 @@ const ERR = require('async-stacktrace')
 const sqlLoader = require('@prairielearn/prairielib/sql-loader')
 const sqlDB = require('@prairielearn/prairielib/sql-db')
 const path = require('path')
-const config = require('./lib/config.js')
+const config = require('../lib/config.js')
 
 const dbDriver = module.exports
 
@@ -43,5 +43,14 @@ dbDriver.initDB = (callback, idleErrCb) => {
       })
     }
     initHelper(initFileList)
+  })
+}
+
+dbDriver.asyncQuery = (query, params) => {
+  return new Promise((resolve, reject) => {
+    sqlDB.query(query, params, (err, result) => {
+      if (err) reject(err)
+      resolve(result)
+    })
   })
 }

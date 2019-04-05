@@ -23,7 +23,9 @@
         <div class="card card-body mb-3">
           <form method="POST">
             <input type="hidden" name="__action" value="newSection">
-            <input type="hidden" name="courseInstanceId" value="<%= courseInstanceId %>">
+            <input type="hidden" name="courseInstanceTerm" value="<%= instTerm %>">
+            <input type="hidden" name="courseInstanceName" value="<%= instName %>">
+            <input type="hidden" name="courseInstanceYear" value="<%= instYear %>">
             <div class="form-group">
               <label for="sectionName">Name</label>
               <input class="form-control" name="name" id="sectionName">
@@ -62,7 +64,9 @@
         <div class="card card-body mb-3">
           <form method="POST">
             <input type="hidden" name="__action" value="newMeeting">
-            <input type="hidden" name="courseInstanceId" value="<%= courseInstanceId %>">
+            <input type="hidden" name="courseInstanceTerm" value="<%= instTerm %>">
+            <input type="hidden" name="courseInstanceName" value="<%= instName %>">
+            <input type="hidden" name="courseInstanceYear" value="<%= instYear %>">
             <div class="form-group">
               <label for="meetingName">Name</label>
               <input class="form-control" name="name" id="meetingName">

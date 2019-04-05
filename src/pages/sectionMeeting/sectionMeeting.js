@@ -1,69 +1,62 @@
 const ERR = require('async-stacktrace')
 const router = require('express').Router({ mergeParams: true })
-const { sqlDb, sqlLoader } = require('@prairielearn/prairielib')
+const { sqlLoader } = require('@prairielearn/prairielib')
+const dbDriver = require('../../dbDriver')
+const asyncErrorHandler = require('../../asyncErrorHandler')
 
 const sql = sqlLoader.loadSqlEquiv(__filename)
 
-router.get('/', (req, res, next) => {
-  res.locals.sectionMeetingId = req.params.sectionMeetingId
-  sqlDb.query(
-    sql.select_swipes_join_section_meetings,
-    { sectionMeetingId: req.params.sectionMeetingId },
+router.get(
+  '/',
+  asyncErrorHandler(async (req, res, next) => {
+    res.locals.sectionMeetingId = req.params.sectionMeetingId
+    const result = await dbDriver.asyncQuery(
+      sql.select_swipes_join_section_meetings,
+      { sectionMeetingId: req.params.sectionMeetingId }
+    )
+    if (result.rows.length === 0) {
+      ERR(
+        new Error('Zero rows from query: select_swipes_join_section_meetings'),
+        next
+      )
+      return
+    }
 
-    (err, result) => {
-      if (ERR(err, next)) return
-      if (result.rows.length === 0) {
-        ERR(new Error('No results found from query.'), next)
+    const secMeetingRow = result.rows[0]
+    res.locals.sectionName = secMeetingRow.s_name
+    res.locals.meetingName = secMeetingRow.m_name
+    res.locals.ciTerm = secMeetingRow.s_ci_term
+    res.locals.ciName = secMeetingRow.s_ci_name
+    res.locals.ciYear = secMeetingRow.s_ci_year
+    res.locals.swipes = result.rows
+    res.render(__filename.replace(/\.js$/, '.ejs'), res.locals)
+  })
+)
+
+router.post(
+  '/',
+  asyncErrorHandler(async (req, res, next) => {
+    if (req.body.__action === 'newSwipe') {
+      const params = {
+        UIN: Number.parseInt(req.body.UIN, 10),
+        ciTerm: req.body.ciTerm,
+        ciName: req.body.ciName,
+        ciYear: Number.parseInt(req.body.ciYear, 10),
+        mname: req.body.meetingName,
+        sname: req.body.sectionName,
+      }
+      if (Number.isNaN(params.UIN)) {
+        ERR(new Error(`Invalid UIN: ${req.body.UIN}`), next)
         return
       }
-
-      const secMeetingRow = result.rows[0]
-      res.locals.sectionName = secMeetingRow.s_name
-      res.locals.meetingName = secMeetingRow.m_name
-      res.locals.swipes = result.rows
-      res.render(__filename.replace(/\.js$/, '.ejs'), res.locals)
-    }
-  )
-})
-
-router.post('/', (req, res, next) => {
-  if (req.body.__action === 'newSwipe') {
-    sqlDb.query(
-      sql.select_section_meetings,
-      { sectionMeetingId: req.body.sectionMeetingId },
-      (err, result) => {
-        if (ERR(err, next)) return
-        if (result.rows.length === 0) {
-          res.redirect(req.originalUrl)
-          return
-        }
-        const secMeetingRow = result.rows[0]
-        const params = {
-          UIN: Number.parseInt(req.body.UIN, 10),
-          ciTerm: secMeetingRow.s_ci_term,
-          ciName: secMeetingRow.s_ci_name,
-          ciYear: Number.parseInt(secMeetingRow.s_ci_year, 10),
-          mname: secMeetingRow.m_name,
-          sname: secMeetingRow.s_name,
-        }
-        if (Number.isNaN(params.UIN)) {
-          next(new Error(`Invalid UIN: ${req.body.UIN}`))
-          return
-        }
-        if (Number.isNaN(params.ciYear)) {
-          next(new Error(`Invalid year: ${secMeetingRow.s_ci_year}`))
-          return
-        }
-        sqlDb.query(sql.insert_students, params, errIns => {
-          if (ERR(errIns, next)) return
-          sqlDb.query(sql.insert_swipes, params, errSm => {
-            if (ERR(errSm, next)) return
-            res.redirect(req.originalUrl)
-          })
-        })
+      if (Number.isNaN(params.ciYear)) {
+        ERR(new Error(`Invalid year: ${req.body.ciYear}`), next)
+        return
       }
-    )
-  }
-})
+      await dbDriver.asyncQuery(sql.insert_students, params)
+      await dbDriver.asyncQuery(sql.insert_swipes, params)
+    }
+  })
+)
 
 module.exports = router

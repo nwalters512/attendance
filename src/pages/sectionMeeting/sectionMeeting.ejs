@@ -22,7 +22,11 @@
         <div class="card card-body mb-3">
           <form method="POST">
             <input type="hidden" name="__action" value="newSwipe" />
-            <input type="hidden" name="sectionMeetingId" value="<%= sectionMeetingId %>" />
+            <input type="hidden" name="sectionName" value="<%= sectionName %>" />
+            <input type="hidden" name="meetingName" value="<%= meetingName %>" />
+            <input type="hidden" name="ciTerm" value="<%= ciTerm %>" />
+            <input type="hidden" name="ciName" value="<%= ciName %>" />
+            <input type="hidden" name="ciYear" value="<%= ciYear %>" />
             <div class="form-group">
               <label for="swipeUIN">UIN</label>
               <input
