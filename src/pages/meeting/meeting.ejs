@@ -6,10 +6,17 @@
   <body>
     <%- include('../partials/header') %>
     <div class="container">
-      <h1>Meeting <%= meetingId %></h1>
-      <h2>Sections</h2>
+        <h1><%= meetingName %></h1>
+      <h2>Section - Meetings</h2>
       <ul class="list-group">
-        <li class="list-group-item">I am a section</li>
+          <% section_meetings.forEach(function(sec_meeting) { %>
+              <a
+                  href="/sectionMeeting/<%= sec_meeting.id %>"
+                  class="list-group-item d-flex justify-content-between align-items-center"
+              >
+                  <%= sec_meeting.s_name %> - <%= sec_meeting.m_name %>
+              </a>
+          <% }) %>
       </ul>
     </div>
   </body>

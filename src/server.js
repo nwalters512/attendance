@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 
 const logger = require('./logger')
 const config = require('./lib/config.js')
-const dbDriver = require('./db-driver')
+const dbDriver = require('./dbDriver')
 
 const app = express()
 app.set('views', path.join(__dirname, 'pages'))
@@ -14,6 +14,7 @@ app.use(bodyParser.urlencoded({ extended: false, limit: 200 * 1024 }))
 app.use(bodyParser.json())
 
 app.use('/', require('./pages/home/home'))
+app.use('/student', require('./pages/student/student'))
 app.use('/course/:courseId', require('./pages/course/course'))
 app.use(
   '/courseInstance/:courseInstanceId',
@@ -26,7 +27,6 @@ app.use(
   require('./pages/sectionMeeting/sectionMeeting')
 )
 
-const server = Server(app)
 dbDriver.initDB(
   err => {
     if (err) {
@@ -35,6 +35,7 @@ dbDriver.initDB(
       return
     }
     logger.info('Finished DB initialization.')
+    const server = Server(app)
     server.listen(config.PORT)
     logger.info(`Listening on ${config.PORT}`)
   },

@@ -6,7 +6,7 @@
   <body>
     <%- include('../partials/header') %>
     <div class="container">
-      <h1>Course <%= courseInstanceId %></h1>
+      <h1><%= instName %></h1>
       <h2>Sections</h2>
       <button
         role="button"
@@ -23,9 +23,16 @@
         <div class="card card-body mb-3">
           <form method="POST">
             <input type="hidden" name="__action" value="newSection">
+            <input type="hidden" name="courseInstanceTerm" value="<%= instTerm %>">
+            <input type="hidden" name="courseInstanceName" value="<%= instName %>">
+            <input type="hidden" name="courseInstanceYear" value="<%= instYear %>">
             <div class="form-group">
               <label for="sectionName">Name</label>
               <input class="form-control" name="name" id="sectionName">
+            </div>
+            <div class="form-group">
+              <label for="sectionCRN">CRN</label>
+              <input class="form-control" name="CRN" id="sectionCRN">
             </div>
             <button type="submit" class="btn btn-primary">Create section</button>
           </form>
@@ -33,7 +40,12 @@
       </div>
       <ul class="list-group mb-4">
         <% sections.forEach(function(section) { %>
-        <li class="list-group-item"><%= section.name %></li>
+        <a
+          href="/section/<%= section.id %>"
+          class="list-group-item d-flex justify-content-between align-items-center"
+        >
+          <%= section.name %>
+        </a>
         <% }) %>
       </ul>
       <h2>Meetings</h2>
@@ -52,6 +64,9 @@
         <div class="card card-body mb-3">
           <form method="POST">
             <input type="hidden" name="__action" value="newMeeting">
+            <input type="hidden" name="courseInstanceTerm" value="<%= instTerm %>">
+            <input type="hidden" name="courseInstanceName" value="<%= instName %>">
+            <input type="hidden" name="courseInstanceYear" value="<%= instYear %>">
             <div class="form-group">
               <label for="meetingName">Name</label>
               <input class="form-control" name="name" id="meetingName">
@@ -62,7 +77,12 @@
       </div>
       <ul class="list-group mb-4">
         <% meetings.forEach(function(meeting) { %>
-        <li class="list-group-item"><%= meeting.name %></li>
+        <a
+          href="/meeting/<%= meeting.id %>"
+          class="list-group-item d-flex justify-content-between align-items-center"
+        >
+          <%= meeting.name %>
+        </a>
         <% }) %>
       </ul>
     </div>

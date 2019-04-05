@@ -6,10 +6,46 @@
   <body>
     <%- include('../partials/header') %>
     <div class="container">
-      <h1>Section Meeting <%= sectionMeetingId %></h1>
+      <h1><%= sectionName %> - <%= meetingName %></h1>
+      <button
+          role="button"
+          class="btn btn-primary mb-3"
+          data-toggle="collapse"
+          data-target="#newSwipe"
+          role="button"
+          aria-expanded="false"
+          aria-controls="newSwipe"
+      >
+          New Swipe
+      </button>
+      <div class="collapse" id="newSwipe">
+        <div class="card card-body mb-3">
+          <form method="POST">
+            <input type="hidden" name="__action" value="newSwipe" />
+            <input type="hidden" name="sectionName" value="<%= sectionName %>" />
+            <input type="hidden" name="meetingName" value="<%= meetingName %>" />
+            <input type="hidden" name="ciTerm" value="<%= ciTerm %>" />
+            <input type="hidden" name="ciName" value="<%= ciName %>" />
+            <input type="hidden" name="ciYear" value="<%= ciYear %>" />
+            <div class="form-group">
+              <label for="swipeUIN">UIN</label>
+              <input
+                class="form-control"
+                name="UIN"
+                id="swipeUIN"
+                type="number"
+                placeholder="111111111"
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">Create swipe</button>
+          </form>
+        </div>
+      </div>
       <h2>Swiped-in students</h2>
       <ul class="list-group">
-        <li class="list-group-item">I am a student</li>
+        <% swipes.forEach(function(swipe) { %>
+        <li class="list-group-item"><%= swipe.uin %></li>
+        <% }) %>
       </ul>
     </div>
   </body>
