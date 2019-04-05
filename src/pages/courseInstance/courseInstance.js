@@ -27,9 +27,9 @@ router.get(
     }
 
     const instRow = resultSec.rows[0]
-    res.locals.instTerm = instRow.term
-    res.locals.instName = instRow.name
-    res.locals.instYear = instRow.year
+    res.locals.instTerm = instRow.ci_term
+    res.locals.instName = instRow.ci_name
+    res.locals.instYear = instRow.ci_year
     res.locals.sections = resultSec.rows
 
     const resultMeet = await dbDriver.asyncQuery(
@@ -63,7 +63,6 @@ router.post(
       }
       await dbDriver.asyncQuery(sql.insert_sections, params)
       await dbDriver.asyncQuery(sql.insert_sections_sm, params)
-      res.redirect(req.originalUrl)
     } else if (req.body.__action === 'newMeeting') {
       const params = {
         name: req.body.name,
@@ -77,9 +76,8 @@ router.post(
       }
       await dbDriver.asyncQuery(sql.insert_meetings, params)
       await dbDriver.asyncQuery(sql.insert_meetings_sm, params)
-    } else {
-      res.redirect(req.originalUrl)
     }
+    res.redirect(req.originalUrl)
   })
 )
 

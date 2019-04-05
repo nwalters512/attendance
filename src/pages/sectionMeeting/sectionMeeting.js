@@ -56,6 +56,7 @@ router.post(
       await dbDriver.asyncQuery(sql.insert_students, params)
       await dbDriver.asyncQuery(sql.insert_swipes, params)
     }
+    res.redirect(req.originalUrl)
   })
 )
 

@@ -23,7 +23,7 @@ router.get(
     const courseRow = result.rows[0]
     res.locals.courseDept = courseRow.dept
     res.locals.courseNumber = courseRow.number
-    res.locals.courseName = courseRow.name
+    res.locals.courseName = courseRow.course_name
     res.locals.course_instances = result.rows
     res.render(__filename.replace(/\.js$/, '.ejs'), res.locals)
   })
@@ -44,8 +44,8 @@ router.post(
         return
       }
       await dbDriver.asyncQuery(sql.insert_course_instance, params)
-      res.redirect(req.originalUrl)
     }
+    res.redirect(req.originalUrl)
   })
 )
 

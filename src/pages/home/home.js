@@ -35,7 +35,7 @@ router.post(
         id: req.body.id,
       }
       await dbDriver.asyncQuery(sql.delete_course, params)
-      res.redirect(req.redirect)
+      res.redirect(req.originalUrl)
     } else {
       res.redirect(req.originalUrl)
     }

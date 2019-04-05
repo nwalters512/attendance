@@ -11,4 +11,4 @@ VALUES
     ($term, $name, $year, $course_name);
 
 -- BLOCK select_course_join_course_instance
-SELECT * FROM courses LEFT OUTER JOIN course_instances ON (courses.name = course_instances.course_name) WHERE (courses.id = $courseId);
+SELECT *, courses.name AS course_name FROM courses LEFT OUTER JOIN course_instances ON (courses.name = course_instances.course_name) WHERE (courses.id = $courseId);

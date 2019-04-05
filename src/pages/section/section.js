@@ -26,7 +26,7 @@ router.get(
 
     const secRow = result.rows[0]
     res.locals.sectionName = secRow.name
-    res.locals.section_meetings = result.rows
+    res.locals.section_meetings = result.rows.filter(r => r.m_name && r.s_name)
     res.render(__filename.replace(/\.js$/, '.ejs'), res.locals)
   })
 )
