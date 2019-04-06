@@ -10,18 +10,15 @@ const sql = sqlLoader.loadSqlEquiv(__filename)
 module.exports.setupPassport = (app) => {
 	passport.use(new LocalStrategy((email, password, done) => {
 
-			console.log("email:", email, "pw:", password);
-	
 			const params = {
 					email: email
 			};
 	
 			dbDriver.asyncQuery(sql.select_user, params).then( (results) => {
-					console.log("DB");
 				if (results.rows.length === 1) {
 					const user = results.rows[0];
 					// Since dev/demo only, do the bare minimum
-					const pwHash = crypto.createHash("sha256").update(password).digest("base64");
+					const pwHash = crypto.createHash("sha256").update(password).digest("hex");
 	
 					// check password
 					if (pwHash === user.password) {
