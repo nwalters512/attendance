@@ -14,9 +14,7 @@ var extractUIN = function(swipeData) {
     // result === null: invalid data
     // result[1]: got UIN from (string containing) 16-digit card number
     // result[2]: got UIN from raw UIN
-    var uin = result ? result[1] || result[2] : null;
-
-    return uin;
+    return result ? result[1] || result[2] : null;
 };
 
 router.get(
