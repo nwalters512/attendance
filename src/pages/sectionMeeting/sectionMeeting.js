@@ -64,6 +64,10 @@ router.post(
         if (results.rows.length > 0) {
             uin = results.rows[0].uin;
         }
+        else {
+          ERR(new Error(`Invalid netid: ${req.body.UIN}`), next);
+          return;
+        }
       }
       else { // otherwise, assume it's a swipe/raw UIN
         uin = extractUIN(req.body.UIN);
