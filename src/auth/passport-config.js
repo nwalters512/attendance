@@ -6,14 +6,18 @@ const dbDriver = require('../dbDriver')
 
 const sql = sqlLoader.loadSqlEquiv(__filename)
 
+
 module.exports.setupPassport = (app) => {
 	passport.use(new LocalStrategy((email, password, done) => {
+
+			console.log("email:", email, "pw:", password);
 	
 			const params = {
-				email
+					email: email
 			};
 	
 			dbDriver.asyncQuery(sql.select_user, params).then( (results) => {
+					console.log("DB");
 				if (results.rows.length === 1) {
 					const user = results.rows[0];
 					// Since dev/demo only, do the bare minimum
@@ -25,24 +29,31 @@ module.exports.setupPassport = (app) => {
 						// keep everything but the hashed password in the session
 						delete user.password;
 	
-						done(null, user);
+						return done(null, user);
 	
 					} else {
 	
-						done(null, false, {message: "Incorrect password"});
+						return done(null, false, {message: "Incorrect password"});
 					}
 	
 				} else {
-					done(null, false, 
+					return done(null, false, 
 						{message: `No unique user '${email}' (${results.rows.length})`});
 				}
 			}).catch( (err) => {
-				done(err, false);
+				return done(err, false);
 			});
 		}
 	));
 
-	
 	app.use(passport.initialize());
 	app.use(passport.session());
+
+	passport.serializeUser((user, done) => {
+	    done(null, user);
+	});
+	
+	passport.deserializeUser((obj, done) => {
+	    done(null, obj);
+	});
 }

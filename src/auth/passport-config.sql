@@ -1,3 +1,3 @@
 -- BLOCK select_user
-SELECT * FROM user
+SELECT * FROM users
 WHERE email=$email;

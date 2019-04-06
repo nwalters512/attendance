@@ -1,6 +1,7 @@
 const { Server } = require('http')
 const express = require('express')
 const expressSession = require('express-session')
+const flash = require('connect-flash')
 const path = require('path')
 const bodyParser = require('body-parser')
 
@@ -16,13 +17,21 @@ app.use(bodyParser.urlencoded({ extended: false, limit: 200 * 1024 }))
 app.use(bodyParser.json())
 app.use(expressSession({
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
   secret: config.secret
 }));
+app.use(flash());
 
 setupPassport(app);
 
+app.use( (req, res, next) => {
+    res.locals._err = req.flash("error");
+    next();
+});
+
 app.use('/', require('./pages/home/home'))
+app.use('/login', require('./pages/login/login'))
+//app.use('/register', require('./pages/register/register'))
 app.use('/student', require('./pages/student/student'))
 app.use('/course/:courseId', require('./pages/course/course'))
 app.use(
