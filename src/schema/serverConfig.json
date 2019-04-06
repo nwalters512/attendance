@@ -15,6 +15,10 @@
     "postgresqlHost": {
       "description": "The host for connecting to the PostgreSQL database.",
       "type": "string"
-    }
+    },
+		"secret" : {
+			"description": "The app secret",
+			"type": "string"
+		}
   }
 }
