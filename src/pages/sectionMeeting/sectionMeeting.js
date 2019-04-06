@@ -1,10 +1,22 @@
 const ERR = require('async-stacktrace')
 const router = require('express').Router({ mergeParams: true })
 const { sqlLoader } = require('@prairielearn/prairielib')
+const { UNIQUE_VIOLATION } = require('pg-error-constants')
 const dbDriver = require('../../dbDriver')
 const asyncErrorHandler = require('../../asyncErrorHandler')
 
 const sql = sqlLoader.loadSqlEquiv(__filename)
+
+// borrowed from https://github.com/illinois/attendance/blob/master/parse-swipe.js
+const extractUIN = swipeData => {
+  const re = /(?:6397(6\d{8})\d{3}|(^6\d{8}$))/
+  const result = re.exec(swipeData)
+
+  // result === null: invalid data
+  // result[1]: got UIN from (string containing) 16-digit card number
+  // result[2]: got UIN from raw UIN
+  return result ? result[1] || result[2] : null
+}
 
 router.get(
   '/',
@@ -37,8 +49,40 @@ router.post(
   '/',
   asyncErrorHandler(async (req, res, next) => {
     if (req.body.__action === 'newSwipe') {
+      let uin = req.body.UIN.trim()
+
+      // attempt to match by netid if it does not start with a number
+      if (uin.length > 0 && Number.isNaN(parseInt(uin[0], 10))) {
+        const params = {
+          netid: uin,
+          ciTerm: req.body.ciTerm,
+          ciName: req.body.ciName,
+          ciYear: Number.parseInt(req.body.ciYear, 10),
+        }
+
+        const results = await dbDriver.asyncQuery(
+          sql.find_matching_student,
+          params
+        )
+        if (results.rows.length > 0) {
+          const stuRow = results.rows[0]
+          uin = stuRow
+        } else {
+          ERR(new Error(`Invalid netid: ${req.body.UIN}`), next)
+          return
+        }
+      } else {
+        // otherwise, assume it's a swipe/raw UIN
+        uin = extractUIN(req.body.UIN)
+      }
+      if (uin === null) {
+        ERR(new Error(`Invalid UIN: ${req.body.UIN}`), next)
+        return
+      }
+      uin = Number.parseInt(uin, 10)
+
       const params = {
-        UIN: Number.parseInt(req.body.UIN, 10),
+        UIN: uin,
         ciTerm: req.body.ciTerm,
         ciName: req.body.ciName,
         ciYear: Number.parseInt(req.body.ciYear, 10),
@@ -54,7 +98,16 @@ router.post(
         return
       }
       await dbDriver.asyncQuery(sql.insert_students, params)
-      await dbDriver.asyncQuery(sql.insert_swipes, params)
+
+      try {
+        await dbDriver.asyncQuery(sql.insert_swipes, params)
+      } catch (e) {
+        // 23505 == unique_violation, aka primary key violation here
+        if (e.code && e.code === UNIQUE_VIOLATION) {
+          // TODO: some nice UI which says it's a duplicate swipe
+          ERR(new Error('Duplicate swipe!'))
+        }
+      }
     }
     res.redirect(req.originalUrl)
   })

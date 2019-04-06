@@ -21,6 +21,7 @@ router.post(
       const params = {
         fName: req.body.firstName,
         lName: req.body.lastName,
+        netid: req.body.netid,
         major: req.body.major,
         id: req.body.id,
       }

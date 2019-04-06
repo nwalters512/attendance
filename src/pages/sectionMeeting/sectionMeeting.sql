@@ -40,3 +40,8 @@ VALUES
 
 -- BLOCK delete_swipes
 DELETE FROM swipes WHERE id = $id;
+
+-- BLOCK find_matching_student
+SELECT UIN FROM students
+WHERE netid = $netid AND ci_term = $ciTerm AND ci_name = $ciName 
+AND ci_year = $ciYear;
