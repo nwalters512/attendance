@@ -49,7 +49,6 @@ router.post(
   asyncErrorHandler(async (req, res, next) => {
     if (req.body.__action === 'newSwipe') {
 
-      // TODO: lookup by netid
       var uin = req.body.UIN.trim();
 
       // attempt to match by netid if it does not start with a number
