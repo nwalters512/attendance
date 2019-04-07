@@ -10,7 +10,7 @@ module.exports.setupPassport = app => {
   passport.use(
     new LocalStrategy((email, password, done) => {
       const params = {
-          email: email,
+        email,
       }
 
       dbDriver

@@ -36,7 +36,7 @@ router.get(
         )
       })()
     } else {
-      res.locals.test_perms = Array.from('false'.repeat(result.rows.length))
+      res.locals.test_perms = Array.from('f'.repeat(result.rows.length))
     }
 
     res.render(__filename.replace(/\.js$/, '.ejs'), res.locals)
