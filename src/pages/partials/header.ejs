@@ -6,7 +6,10 @@
               <a class="nav-link" href="/student">Registration Data</a>
           </li>
       </ul>
-        </div>
+
+			<% if (_user) {%>
+			<a style="color:white" href="/logout"> <%= _user.email %> </p>
+			<%} %>
 </nav>
 
 <%
