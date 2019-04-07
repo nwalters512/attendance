@@ -4,7 +4,7 @@ const config = module.exports
 
 config.PORT = process.env.PORT || 3000
 
-config.secret = "I AM REALLY SECRET";
+config.secret = 'I AM REALLY SECRET'
 
 config.postgresqlUser = 'attendance-adm'
 config.postgresqlPassword = null

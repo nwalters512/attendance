@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const passport = require("passport")
+const passport = require('passport')
 const asyncErrorHandler = require('../../asyncErrorHandler')
 
 router.get(
@@ -11,10 +11,10 @@ router.get(
 
 router.post(
   '/',
-  passport.authenticate("local", {
-      successRedirect: "/",
-      failureRedirect: "/login",
-      failureFlash: true
+  passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: true,
   })
 )
 

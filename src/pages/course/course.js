@@ -28,11 +28,15 @@ router.get(
     res.locals.course_instances = result.rows
     // showcasing using the checks
     if (await checks.isLoggedIn(req)) {
-        res.locals.test_perms = await (async () =>  { 
-            return Promise.all(result.rows.map(r => checks.staffHasPermissionsForCourseInstance(req, r.id)));
-        })();
+      res.locals.test_perms = await (async () => {
+        return Promise.all(
+          result.rows.map(r =>
+            checks.staffHasPermissionsForCourseInstance(req, r.id)
+          )
+        )
+      })()
     } else {
-        res.locals.test_perms = Array.from("false".repeat(result.rows.length));
+      res.locals.test_perms = Array.from('false'.repeat(result.rows.length))
     }
 
     res.render(__filename.replace(/\.js$/, '.ejs'), res.locals)
