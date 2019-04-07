@@ -1,4 +1,3 @@
-const ERR = require('async-stacktrace')
 const router = require('express').Router()
 const passport = require("passport")
 const asyncErrorHandler = require('../../asyncErrorHandler')

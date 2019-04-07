@@ -11,7 +11,7 @@ module.exports.setupPassport = (app) => {
 	passport.use(new LocalStrategy((email, password, done) => {
 
 			const params = {
-					email: email
+					email
 			};
 	
 			dbDriver.asyncQuery(sql.select_user, params).then( (results) => {
@@ -28,15 +28,15 @@ module.exports.setupPassport = (app) => {
 	
 						return done(null, user);
 	
-					} else {
+					} 
 	
 						return done(null, false, {message: "Incorrect password"});
-					}
+					
 	
-				} else {
+				} 
 					return done(null, false, 
 						{message: `No unique user '${email}' (${results.rows.length})`});
-				}
+				
 			}).catch( (err) => {
 				return done(err, false);
 			});
@@ -47,10 +47,10 @@ module.exports.setupPassport = (app) => {
 	app.use(passport.session());
 
 	passport.serializeUser((user, done) => {
-	    done(null, user);
+			done(null, user);
 	});
 	
 	passport.deserializeUser((obj, done) => {
-	    done(null, obj);
+			done(null, obj);
 	});
 }

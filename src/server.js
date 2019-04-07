@@ -38,6 +38,7 @@ app.use( (req, res, next) => {
 app.use('/', require('./pages/home/home'))
 app.use('/login', require('./pages/login/login'))
 app.use('/register', require('./pages/register/register'))
+
 app.use('/logout', (req, res, _) => {
     req.logout();
     res.redirect('/');
