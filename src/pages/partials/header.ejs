@@ -5,25 +5,25 @@
           <li class="nav-item active">
               <a class="nav-link" href="/student">Registration Data</a>
           </li>
-					<li class="nav-item active">
-							<a class="nav-link" href="/register"> Register </a>
-					</li>
-					<li class="nav-item active">
-							<a class="nav-link" href="/login"> Login </a>
-					</li>
+          <li class="nav-item active">
+              <a class="nav-link" href="/register"> Register </a>
+          </li>
+          <li class="nav-item active">
+              <a class="nav-link" href="/login"> Login </a>
+          </li>
       </ul>
 
-			<% if (_user) {%>
-			<a style="color:white" href="/logout"> <%= _user.email %> </p>
-			<%} %>
+      <% if (_user) {%>
+      <a style="color:white" href="/logout"> <%= _user.email %> </p>
+      <%} %>
 </nav>
 
 <%
-	_err.forEach( (e) => {
+  _err.forEach( (e) => {
 %>
 
 <p style="background-color:red"> <%= e %> </p>
 
 <%
-	});
+  });
 %>
