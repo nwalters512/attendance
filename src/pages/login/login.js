@@ -11,11 +11,11 @@ router.get(
 
 router.post(
   '/',
-	passport.authenticate("local", {
-			successRedirect: "/",
-			failureRedirect: "/login",
-			failureFlash: true
-	})
+  passport.authenticate("local", {
+      successRedirect: "/",
+      failureRedirect: "/login",
+      failureFlash: true
+  })
 )
 
 module.exports = router
