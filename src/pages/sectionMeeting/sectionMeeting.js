@@ -102,7 +102,6 @@ router.post(
       try {
         await dbDriver.asyncQuery(sql.insert_swipes, params)
       } catch (e) {
-        // 23505 == unique_violation, aka primary key violation here
         if (e.code && e.code === UNIQUE_VIOLATION) {
           // TODO: some nice UI which says it's a duplicate swipe
           ERR(new Error('Duplicate swipe!'))

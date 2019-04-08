@@ -56,12 +56,13 @@
         </div>
       </div>
       <div class="list-group">
-        <% course_instances.forEach(function(course_inst) { %>
+        <% course_instances.forEach(function(course_inst, i) { %>
         <a
           href="/courseInstance/<%= course_inst.id %>"
           class="list-group-item d-flex justify-content-between align-items-center"
         >
           <%= course_inst.name %>
+          [<%= test_perms[i] %>]
         </a>
         <% }) %>
       </div>
