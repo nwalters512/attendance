@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS user_assists_course_instance (
-  id       serial,
+  id       serial UNIQUE,
   email    varchar(80) REFERENCES users (email),
   ci_term  char(6),
   ci_name  varchar(80),

@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS students (
-  id              serial,
+  id              serial UNIQUE,
   UIN             bigint,
   ci_term         char(6),
   ci_name         varchar(80),
