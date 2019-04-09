@@ -8,7 +8,7 @@ WHERE
 
 -- BLOCK get_user_is_owner_for_course
 SELECT * FROM
-	(SELECT * FROM courses WHERE id=$course_id) C INNER JOIN is_owner O
+	(SELECT * FROM courses WHERE id=$courseId) C INNER JOIN is_owner O
 	ON (C.name = O.name)
 WHERE
   O.email = $userEmail;

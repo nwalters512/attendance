@@ -9,3 +9,9 @@ VALUES
 
 -- BLOCK delete_course
 DELETE FROM courses WHERE id = $id;
+
+-- BLOCK give_owner
+INSERT INTO is_owner
+  (name, email)
+VALUES
+  ($courseName, $userEmail);

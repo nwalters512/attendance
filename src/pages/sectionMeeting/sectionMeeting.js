@@ -4,6 +4,7 @@ const { sqlLoader } = require('@prairielearn/prairielib')
 const { UNIQUE_VIOLATION } = require('pg-error-constants')
 const dbDriver = require('../../dbDriver')
 const asyncErrorHandler = require('../../asyncErrorHandler')
+const checks = require('../../auth/checks')
 
 const sql = sqlLoader.loadSqlEquiv(__filename)
 
@@ -21,6 +22,10 @@ const extractUIN = swipeData => {
 router.get(
   '/',
   asyncErrorHandler(async (req, res, next) => {
+    if (!await checks.isLoggedIn(req)) {
+      res.redirect('/login') // TODO: redirect back after login
+        return
+    }
     res.locals.sectionMeetingId = req.params.sectionMeetingId
     const result = await dbDriver.asyncQuery(
       sql.select_swipes_join_section_meetings,
@@ -48,6 +53,10 @@ router.get(
 router.post(
   '/',
   asyncErrorHandler(async (req, res, next) => {
+    if (!await checks.isLoggedIn(req)) {
+      res.sendStatus(403)
+        return
+    }
     if (req.body.__action === 'newSwipe') {
       let uin = req.body.UIN.trim()
 
