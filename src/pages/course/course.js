@@ -1,6 +1,7 @@
 const ERR = require('async-stacktrace')
 const router = require('express').Router({ mergeParams: true })
 const { sqlLoader } = require('@prairielearn/prairielib')
+const { UNIQUE_VIOLATION } = require('pg-error-constants')
 const dbDriver = require('../../dbDriver')
 const asyncErrorHandler = require('../../asyncErrorHandler')
 const checks = require('../../auth/checks')
@@ -30,19 +31,10 @@ router.get(
           res.locals.courseDept = courseRow.dept
           res.locals.courseNumber = courseRow.number
           res.locals.courseName = courseRow.course_name
-      if (result.rows.length > 1 ) {
+      if (result.rows.length >= 1 && courseRow.name != undefined ) {
           res.locals.course_instances = result.rows
-          // showcasing using the checks
-          res.locals.test_perms = await (async () => {
-              return Promise.all(
-                  result.rows.map(r =>
-                      checks.staffHasPermissionsForCourseInstance(req, r.id)
-                  )
-              )
-          })
       } else {
           res.locals.course_instances = []
-          res.locals.test_perms = []
       }
     res.render(__filename.replace(/\.js$/, '.ejs'), res.locals)
   })
@@ -56,6 +48,12 @@ router.post(
         return
     }
     if (req.body.__action === 'newCourseInstance') {
+        if (! await checks.staffIsOwnerOfCourse(req, req.params.courseId)) {
+            req.flash("error", "Must be owner to add new course instances!")
+            res.redirect(req.originalUrl);
+            return
+        }
+
       const params = {
         term: req.body.term,
         name: req.body.name,
@@ -66,7 +64,19 @@ router.post(
         ERR(new Error(`Invalid year: ${req.body.year}`), next)
         return
       }
+        try {
       await dbDriver.asyncQuery(sql.insert_course_instance, params)
+        } catch (e) {
+            if (e.code && e.code === UNIQUE_VIOLATION) {
+                req.flash('error', 'Course instance already exists')
+                res.redirect(req.originalUrl)
+                return
+            }
+        }
+
+        params.email = req.user.email;
+
+        await dbDriver.asyncQuery(sql.give_instance_access, params)
     }
     res.redirect(req.originalUrl)
   })
