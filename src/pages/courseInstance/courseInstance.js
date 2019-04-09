@@ -10,9 +10,9 @@ const sql = sqlLoader.loadSqlEquiv(__filename)
 router.get(
   '/',
   asyncErrorHandler(async (req, res, next) => {
-    if (!await checks.isLoggedIn(req)) {
+    if (!(await checks.isLoggedIn(req))) {
       res.redirect('/login') // TODO: redirect back after login
-				return
+      return
     }
     res.locals.courseInstanceId = req.params.courseInstanceId
 
@@ -52,7 +52,7 @@ router.post(
   asyncErrorHandler(async (req, res, next) => {
     if (!checks.isLoggedIn(req)) {
       res.sendStatus(403)
-        return
+      return
     }
     if (req.body.__action === 'newSection') {
       const params = {

@@ -10,9 +10,9 @@ const sql = sqlLoader.loadSqlEquiv(__filename)
 router.get(
   '/',
   asyncErrorHandler(async (req, res, next) => {
-    if (!await checks.isLoggedIn(req)) {
+    if (!(await checks.isLoggedIn(req))) {
       res.redirect('/login') // TODO: redirect back after login
-        return
+      return
     }
     res.locals.sectionId = req.params.sectionId
     const result = await dbDriver.asyncQuery(

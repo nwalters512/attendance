@@ -11,9 +11,9 @@ const sql = sqlLoader.loadSqlEquiv(__filename)
 router.get(
   '/',
   asyncErrorHandler(async (req, res, _next) => {
-    if (!await checks.isLoggedIn(req)) {
+    if (!(await checks.isLoggedIn(req))) {
       res.redirect('/login') // TODO: redirect back after login
-        return
+      return
     }
     const result = await dbDriver.asyncQuery(sql.select_courses, {})
     res.locals.courses = result.rows
@@ -24,9 +24,9 @@ router.get(
 router.post(
   '/',
   asyncErrorHandler(async (req, res, next) => {
-    if (!await checks.isLoggedIn(req)) {
+    if (!(await checks.isLoggedIn(req))) {
       res.sendStatus(403)
-        return
+      return
     }
     if (req.body.__action === 'newCourse') {
       let params = {
@@ -40,32 +40,30 @@ router.post(
         return
       }
 
-        try {
-            await dbDriver.asyncQuery(sql.insert_course, params)
-        } catch (e) {
-            if (e.code && e.code === UNIQUE_VIOLATION) {
-                req.flash('error', 'Course already exists')
-                res.redirect(req.originalUrl)
-                return
-            }
+      try {
+        await dbDriver.asyncQuery(sql.insert_course, params)
+      } catch (e) {
+        if (e.code && e.code === UNIQUE_VIOLATION) {
+          req.flash('error', 'Course already exists')
+          res.redirect(req.originalUrl)
+          return
+        }
       }
 
       params = {
-          courseName: req.body.name,
-          userEmail: req.user.email
+        courseName: req.body.name,
+        userEmail: req.user.email,
       }
 
-      await dbDriver.asyncQuery(sql.give_owner, params);
+      await dbDriver.asyncQuery(sql.give_owner, params)
 
       res.redirect(req.originalUrl)
-
     } else if (req.body.__action === 'deleteCourse') {
-
-        if (!await checks.staffIsOwnerOfCourse(req, req.body.id)) {
-            req.flash("error", "You must be the owner of a course to delete it!");
-            res.redirect(req.originalUrl);
-            return
-        }
+      if (!(await checks.staffIsOwnerOfCourse(req, req.body.id))) {
+        req.flash('error', 'You must be the owner of a course to delete it!')
+        res.redirect(req.originalUrl)
+        return
+      }
 
       const params = {
         id: req.body.id,
@@ -74,7 +72,6 @@ router.post(
       await dbDriver.asyncQuery(sql.delete_course, params)
 
       res.redirect(req.originalUrl)
-
     } else {
       res.redirect(req.originalUrl)
     }

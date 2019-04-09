@@ -9,9 +9,9 @@ const sql = sqlLoader.loadSqlEquiv(__filename)
 router.get(
   '/',
   asyncErrorHandler(async (req, res, _next) => {
-    if (!await checks.isLoggedIn(req)) {
+    if (!(await checks.isLoggedIn(req))) {
       res.redirect('/login') // TODO: redirect back after login
-        return
+      return
     }
     const result = await dbDriver.asyncQuery(sql.select_students, {})
     res.locals.students = result.rows
@@ -22,9 +22,9 @@ router.get(
 router.post(
   '/',
   asyncErrorHandler(async (req, res, _next) => {
-    if (!await checks.isLoggedIn(req)) {
+    if (!(await checks.isLoggedIn(req))) {
       res.sendStatus(403)
-        return
+      return
     }
     if (req.body.__action === 'updateStudent') {
       const params = {

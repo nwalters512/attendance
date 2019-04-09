@@ -22,9 +22,9 @@ const extractUIN = swipeData => {
 router.get(
   '/',
   asyncErrorHandler(async (req, res, next) => {
-    if (!await checks.isLoggedIn(req)) {
+    if (!(await checks.isLoggedIn(req))) {
       res.redirect('/login') // TODO: redirect back after login
-        return
+      return
     }
     res.locals.sectionMeetingId = req.params.sectionMeetingId
     const result = await dbDriver.asyncQuery(
@@ -53,9 +53,9 @@ router.get(
 router.post(
   '/',
   asyncErrorHandler(async (req, res, next) => {
-    if (!await checks.isLoggedIn(req)) {
+    if (!(await checks.isLoggedIn(req))) {
       res.sendStatus(403)
-        return
+      return
     }
     if (req.body.__action === 'newSwipe') {
       let uin = req.body.UIN.trim()

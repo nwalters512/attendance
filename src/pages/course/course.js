@@ -11,9 +11,9 @@ const sql = sqlLoader.loadSqlEquiv(__filename)
 router.get(
   '/',
   asyncErrorHandler(async (req, res, next) => {
-    if (!await checks.isLoggedIn(req)) {
+    if (!(await checks.isLoggedIn(req))) {
       res.redirect('/login') // TODO: redirect back after login
-        return
+      return
     }
 
     res.locals.courseId = req.params.courseId
@@ -27,15 +27,15 @@ router.get(
       )
       return
     }
-          const courseRow = result.rows[0]
-          res.locals.courseDept = courseRow.dept
-          res.locals.courseNumber = courseRow.number
-          res.locals.courseName = courseRow.course_name
-      if (result.rows.length >= 1 && courseRow.name != undefined ) {
-          res.locals.course_instances = result.rows
-      } else {
-          res.locals.course_instances = []
-      }
+    const courseRow = result.rows[0]
+    res.locals.courseDept = courseRow.dept
+    res.locals.courseNumber = courseRow.number
+    res.locals.courseName = courseRow.course_name
+    if (result.rows.length >= 1 && courseRow.name !== undefined && courseRow.name !== null) {
+      res.locals.course_instances = result.rows
+    } else {
+      res.locals.course_instances = []
+    }
     res.render(__filename.replace(/\.js$/, '.ejs'), res.locals)
   })
 )
@@ -43,16 +43,16 @@ router.get(
 router.post(
   '/',
   asyncErrorHandler(async (req, res, next) => {
-    if (!await checks.isLoggedIn(req)) {
+    if (!(await checks.isLoggedIn(req))) {
       res.sendStatus(403)
-        return
+      return
     }
     if (req.body.__action === 'newCourseInstance') {
-        if (! await checks.staffIsOwnerOfCourse(req, req.params.courseId)) {
-            req.flash("error", "Must be owner to add new course instances!")
-            res.redirect(req.originalUrl);
-            return
-        }
+      if (!(await checks.staffIsOwnerOfCourse(req, req.params.courseId))) {
+        req.flash('error', 'Must be owner to add new course instances!')
+        res.redirect(req.originalUrl)
+        return
+      }
 
       const params = {
         term: req.body.term,
@@ -64,19 +64,19 @@ router.post(
         ERR(new Error(`Invalid year: ${req.body.year}`), next)
         return
       }
-        try {
-      await dbDriver.asyncQuery(sql.insert_course_instance, params)
-        } catch (e) {
-            if (e.code && e.code === UNIQUE_VIOLATION) {
-                req.flash('error', 'Course instance already exists')
-                res.redirect(req.originalUrl)
-                return
-            }
+      try {
+        await dbDriver.asyncQuery(sql.insert_course_instance, params)
+      } catch (e) {
+        if (e.code && e.code === UNIQUE_VIOLATION) {
+          req.flash('error', 'Course instance already exists')
+          res.redirect(req.originalUrl)
+          return
         }
+      }
 
-        params.email = req.user.email;
+      params.email = req.user.email
 
-        await dbDriver.asyncQuery(sql.give_instance_access, params)
+      await dbDriver.asyncQuery(sql.give_instance_access, params)
     }
     res.redirect(req.originalUrl)
   })
