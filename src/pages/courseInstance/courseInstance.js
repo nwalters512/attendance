@@ -3,12 +3,17 @@ const router = require('express').Router({ mergeParams: true })
 const { sqlLoader } = require('@prairielearn/prairielib')
 const dbDriver = require('../../dbDriver')
 const asyncErrorHandler = require('../../asyncErrorHandler')
+const checks = require('../../auth/checks')
 
 const sql = sqlLoader.loadSqlEquiv(__filename)
 
 router.get(
   '/',
   asyncErrorHandler(async (req, res, next) => {
+    if (!(await checks.isLoggedIn(req))) {
+      res.redirect('/login') // TODO: redirect back after login
+      return
+    }
     res.locals.courseInstanceId = req.params.courseInstanceId
 
     const resultSec = await dbDriver.asyncQuery(
@@ -45,6 +50,10 @@ router.get(
 router.post(
   '/',
   asyncErrorHandler(async (req, res, next) => {
+    if (!checks.isLoggedIn(req)) {
+      res.sendStatus(403)
+      return
+    }
     if (req.body.__action === 'newSection') {
       const params = {
         name: req.body.name,

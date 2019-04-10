@@ -4,3 +4,11 @@ SELECT * FROM
 	ON (CI.year = A.ci_year AND CI.term = A.ci_term AND CI.name = A.ci_name)
 WHERE
 	A.email = $userEmail;
+
+
+-- BLOCK get_user_is_owner_for_course
+SELECT * FROM
+	(SELECT * FROM courses WHERE id=$courseId) C INNER JOIN is_owner O
+	ON (C.name = O.name)
+WHERE
+  O.email = $userEmail;

@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS meetings (
-  id       serial,
+  id       serial UNIQUE,
   name     varchar(80),
   ci_term  char(6),
   ci_name  varchar(80),

@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS student_is_in_section (
-  id        serial,
+  id        serial UNIQUE,
   startTime integer,
   UIN       bigint,
   endTime   integer,
