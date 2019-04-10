@@ -7,4 +7,4 @@ mkdir -p ${TEMP_DIR}
 script_dir="${0%/*}"
 cp "${script_dir}"/*.sql ${TEMP_DIR}
 
-sudo -i -u postgres sh -c "psql -a -f ${TEMP_DIR}/dropAllTables.sql"
+sudo -i -u postgres sh -c "psql -U attendance-adm -d attendance -a -f ${TEMP_DIR}/dropAllTables.sql"
