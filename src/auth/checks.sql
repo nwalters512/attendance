@@ -12,3 +12,11 @@ SELECT * FROM
 	ON (C.name = O.name)
 WHERE
   O.email = $userEmail;
+
+-- BLOCK user_is_student
+SELECT * FROM
+ student_is_user
+WHERE
+	UIN = $uin AND stu_ci_term = $ciTerm AND 
+	stu_ci_name = $ciName AND stu_ci_year = $ciYear AND
+	email = $userEmail;
