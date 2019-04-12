@@ -10,11 +10,21 @@
         <h1> Linked Courses </h1>
 
         <div class="list-group">
-        <% linked_course_data.forEach( (cdata) => {  %>
+            <% if (linked_course_data.length > 0) {
+
+                linked_course_data.forEach( (cdata) => {  
+            %>
         <div class="list-group-item d-flex justify-content-between align-items-center">
            <%= cdata.ci_name %> (<%= cdata.ci_term %> <%= cdata.ci_year %>)
         </div>
-        <% }) %>
+        <% 
+            })
+             } else {
+        %>
+            <p> None, link your UIN below. </p>
+        <% 
+             }
+        %>
         </div>
 
         <br/>
