@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('../partials/head') %>
+  </head>
+  <body>
+    <%- include('../partials/header') %>
+    <div class="container">
+				<br/>
+        <h1> Linked Courses </h1>
+
+        <div class="list-group">
+        <% linked_course_data.forEach( (cdata) => {  %>
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+           <%= cdata.ci_name %> (<%= cdata.ci_term %> <%= cdata.ci_year %>)
+        </div>
+        <% }) %>
+        </div>
+
+        <br/>
+        <h2> Relink Courses </h2>
+
+        <form method="POST">
+    	  <div class="form-group">
+    	    <label for="uin">UIN</label>
+    	    <input
+    	      class="form-control"
+    	      name="uin"
+    	      id="uin"
+    	    />
+    	  </div>
+    	  <button type="submit" class="btn btn-primary">Register</button>
+
+        </form>
+
+        <br/>
+    </div>
+  </body>
+</html>

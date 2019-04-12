@@ -37,7 +37,7 @@ checks.staffHasPermissionsForCourseInstance = async (req, instanceId) => {
   return results.rows.length > 0
 }
 
-checks.userIsStudent = async (req, student) {
+checks.userIsStudent = async (req, student) => {
 		const params = {
 				userEmail: req.user.email,
 				uin: student.uin,
