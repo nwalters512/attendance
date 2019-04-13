@@ -38,18 +38,15 @@ checks.staffHasPermissionsForCourseInstance = async (req, instanceId) => {
 }
 
 checks.userIsStudent = async (req, student) => {
-		const params = {
-				userEmail: req.user.email,
-				uin: student.uin,
-				ciYear: student.ci_year,
-				ciName: student.ci_name,
-				ciTerm: student.ci_term,
-		}
+  const params = {
+    userEmail: req.user.email,
+    uin: student.uin,
+    ciYear: student.ci_year,
+    ciName: student.ci_name,
+    ciTerm: student.ci_term,
+  }
 
-		const results = await dbDriver.asyncQuery(
-				sql.user_is_student,
-				params
-		)
+  const results = await dbDriver.asyncQuery(sql.user_is_student, params)
 
-		return results.rows.length > 0
+  return results.rows.length > 0
 }
