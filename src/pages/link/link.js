@@ -21,9 +21,8 @@ router.get(
           email: req.user.email
       }
 
-    //res.locals.linked_course_data = [{ci_name: "CS225 SP19", ci_term: "Spring", ci_year: 2019 }]
       const results = await dbDriver.asyncQuery(
-          sql.get_linked_students,
+          sql.get_linked_students_with_info,
           params
       );
 
@@ -41,6 +40,25 @@ router.post(
       return
     }
 
+      let uin = Number.parseInt(req.body.uin, 10)
+
+      if (Number.isNaN(uin)) {
+          req.flash("error", "Invalid UIN");
+    res.redirect(req.originalUrl)
+          return
+      }
+
+      const params = {
+          email: req.user.email,
+          uin,
+      }
+
+      await dbDriver.asyncQuery(sql.unlink_students, params)
+      const results = await dbDriver.asyncQuery(sql.link_students, params)
+
+      req.flash("info", "Linked with " + results.rowCount + " courses")
+    res.redirect(req.originalUrl)
+      return
   })
 )
 

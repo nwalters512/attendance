@@ -15,7 +15,7 @@
                 linked_course_data.forEach( (cdata) => {  
             %>
         <div class="list-group-item d-flex justify-content-between align-items-center">
-           <%= cdata.ci_name %> (<%= cdata.ci_term %> <%= cdata.ci_year %>)
+           <%= cdata.stu_ci_name %> (<%= cdata.course_name %>, <%= cdata.stu_ci_term %> <%= cdata.stu_ci_year %>)
         </div>
         <% 
             })
@@ -40,8 +40,9 @@
     	    />
     	  </div>
     	  <button type="submit" class="btn btn-primary">Register</button>
-
         </form>
+
+        <p> Warning: this will unlink your current courses and relink based on the provided netid </p>
 
         <br/>
     </div>

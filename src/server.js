@@ -26,9 +26,10 @@ app.use(flash())
 
 setupPassport(app)
 
-// bind error flash for all pages
+// bind flashes for all pages
 app.use((req, res, next) => {
   res.locals._err = req.flash('error')
+  res.locals._info = req.flash('info')
   next()
 })
 // bind the logged in user, for the header
