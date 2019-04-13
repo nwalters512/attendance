@@ -2,15 +2,21 @@
   <a class="navbar-brand" href="/">Attendance</a>
   <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
+          <% if (_user) { %>
           <li class="nav-item active">
               <a class="nav-link" href="/student">Registration Data</a>
           </li>
+          <li class="nav-item active">
+              <a class="nav-link" href="/link">Link Classes</a>
+          </li>
+          <% } else {%>
           <li class="nav-item active">
               <a class="nav-link" href="/register"> Register </a>
           </li>
           <li class="nav-item active">
               <a class="nav-link" href="/login"> Login </a>
           </li>
+          <% } %>
       </ul>
 
       <% if (_user) {%>
@@ -23,6 +29,16 @@
 %>
 
 <p style="background-color:red"> <%= e %> </p>
+
+<%
+  });
+%>
+
+<%
+  _info.forEach( (e) => {
+%>
+
+<p style="background-color:green"> <%= e %> </p>
 
 <%
   });

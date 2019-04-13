@@ -31,7 +31,11 @@ router.get(
     res.locals.courseDept = courseRow.dept
     res.locals.courseNumber = courseRow.number
     res.locals.courseName = courseRow.course_name
-    if (result.rows.length >= 1 && courseRow.name !== undefined && courseRow.name !== null) {
+    if (
+      result.rows.length >= 1 &&
+      courseRow.name !== undefined &&
+      courseRow.name !== null
+    ) {
       res.locals.course_instances = result.rows
     } else {
       res.locals.course_instances = []

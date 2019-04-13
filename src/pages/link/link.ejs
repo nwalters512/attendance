@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('../partials/head') %>
+  </head>
+  <body>
+    <%- include('../partials/header') %>
+    <div class="container">
+				<br/>
+        <h1> Linked Courses </h1>
+
+        <div class="list-group">
+            <% if (linked_course_data.length > 0) {
+
+                linked_course_data.forEach( (cdata) => {  
+            %>
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+           <%= cdata.stu_ci_name %> (<%= cdata.course_name %>, <%= cdata.stu_ci_term %> <%= cdata.stu_ci_year %>)
+        </div>
+        <% 
+            })
+             } else {
+        %>
+            <p> None, link your UIN below. </p>
+        <% 
+             }
+        %>
+        </div>
+
+        <br/>
+        <h2> Relink Courses </h2>
+
+        <form method="POST">
+    	  <div class="form-group">
+    	    <label for="uin">UIN</label>
+    	    <input
+    	      class="form-control"
+    	      name="uin"
+    	      id="uin"
+              type="number"
+    	    />
+    	  </div>
+    	  <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+
+        <p> Warning: this will unlink your current courses and relink based on the provided UIN </p>
+
+        <br/>
+    </div>
+  </body>
+</html>
