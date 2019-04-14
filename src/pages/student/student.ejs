@@ -6,17 +6,7 @@
     <body>
         <%- include('../partials/header') %>
         <div class="container">
-            <h1>Student Information</h1>
-            <h2>Upload Student Roster</h2>
-            <form ref='uploadRoster' 
-                  id='uploadRoster' 
-                  method='POST' 
-                  encType="multipart/form-data">
-                <input type="hidden" name="__action" value="uploadRoster" />
-                <label for="rosterFile">Choose roster file to upload</label>
-                <input id="rosterFile" class="btn btn-primary" type="file" onchange="this.form.submit()" name="rosterFile" />
-            </form>
-            <h2>Students</h2>
+            <h1>Students</h1>
             <ul class="list-group">
                 <% students.forEach(function(student) { %>
                 <li

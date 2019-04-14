@@ -7,6 +7,15 @@
     <%- include('../partials/header') %>
     <div class="container">
       <h1><%= instName %></h1>
+      <h2>Update Roster</h2>
+        <form ref='uploadRoster' 
+              id='uploadRoster' 
+              method='POST' 
+              encType="multipart/form-data">
+            <input type="hidden" name="__action" value="uploadRoster" />
+            <label for="rosterFile">Choose roster file to upload</label>
+            <input id="rosterFile" type="file" onchange="this.form.submit()" name="rosterFile" />
+        </form>
       <h2>Sections</h2>
       <button
         role="button"
