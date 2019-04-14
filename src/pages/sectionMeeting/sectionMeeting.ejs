@@ -7,27 +7,27 @@
     <%- include('../partials/header') %>
     <div class="container">
       <h1><%= sectionName %> - <%= meetingName %></h1>
-        <div class="card card-body mb-3">
-          <form method="POST">
-            <input type="hidden" name="__action" value="newSwipe" />
-            <input type="hidden" name="sectionName" value="<%= sectionName %>" />
-            <input type="hidden" name="meetingName" value="<%= meetingName %>" />
-            <input type="hidden" name="ciTerm" value="<%= ciTerm %>" />
-            <input type="hidden" name="ciName" value="<%= ciName %>" />
-            <input type="hidden" name="ciYear" value="<%= ciYear %>" />
-            <div class="form-group">
-              <label for="swipeUIN">UIN</label>
-              <input
-                class="form-control"
-                name="UIN"
-                id="swipeUIN"
-                placeholder="611111111"
-                autofocus
-              />
-            </div>
-            <button type="submit" class="btn btn-primary">Create swipe</button>
-          </form>
-        </div>
+      <div class="card card-body mb-3">
+        <form method="POST">
+          <input type="hidden" name="__action" value="newSwipe" />
+          <input type="hidden" name="sectionName" value="<%= sectionName %>" />
+          <input type="hidden" name="meetingName" value="<%= meetingName %>" />
+          <input type="hidden" name="ciTerm" value="<%= ciTerm %>" />
+          <input type="hidden" name="ciName" value="<%= ciName %>" />
+          <input type="hidden" name="ciYear" value="<%= ciYear %>" />
+          <div class="form-group">
+            <label for="swipeUIN">UIN</label>
+            <input
+              class="form-control"
+              name="UIN"
+              id="swipeUIN"
+              placeholder="611111111"
+              autofocus
+            />
+          </div>
+          <button type="submit" class="btn btn-primary">Create swipe</button>
+        </form>
+      </div>
       <h2>Swiped-in students</h2>
       <ul class="list-group">
         <% swipes.forEach(function(swipe) { %>
