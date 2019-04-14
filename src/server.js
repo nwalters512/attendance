@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 const { Server } = require('http')
 const express = require('express')
 const session = require('express-session')
