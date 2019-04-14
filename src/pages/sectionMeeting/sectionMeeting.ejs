@@ -7,18 +7,6 @@
     <%- include('../partials/header') %>
     <div class="container">
       <h1><%= sectionName %> - <%= meetingName %></h1>
-      <button
-          role="button"
-          class="btn btn-primary mb-3"
-          data-toggle="collapse"
-          data-target="#newSwipe"
-          role="button"
-          aria-expanded="false"
-          aria-controls="newSwipe"
-      >
-          New Swipe
-      </button>
-      <div class="collapse" id="newSwipe">
         <div class="card card-body mb-3">
           <form method="POST">
             <input type="hidden" name="__action" value="newSwipe" />
@@ -39,7 +27,6 @@
             <button type="submit" class="btn btn-primary">Create swipe</button>
           </form>
         </div>
-      </div>
       <h2>Swiped-in students</h2>
       <ul class="list-group">
         <% swipes.forEach(function(swipe) { %>
