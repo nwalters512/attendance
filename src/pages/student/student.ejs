@@ -6,32 +6,42 @@
     <body>
         <%- include('../partials/header') %>
         <div class="container">
-            <h1>Students</h1>
+            <h1>Student Information</h1>
+            <h2>Upload Student Roster</h2>
+            <form ref='uploadRoster' 
+                  id='uploadRoster' 
+                  method='POST' 
+                  encType="multipart/form-data">
+                <input type="hidden" name="__action" value="uploadRoster" />
+                <label for="rosterFile">Choose roster file to upload</label>
+                <input id="rosterFile" class="btn btn-primary" type="file" onchange="this.form.submit()" name="rosterFile" />
+            </form>
+            <h2>Students</h2>
             <ul class="list-group">
                 <% students.forEach(function(student) { %>
-                    <li
-                        class="list-group-item d-flex justify-content-between align-items-center"
+                <li
+                    class="list-group-item d-flex justify-content-between align-items-center"
                     >
-                        <%= student.firstname %> <%= student.lastname %> <%= student.major %> (<%= student.uin %> <%= student.ci_name %> <%= student.ci_term %> <%= student.ci_year %>)
-                        <form method="POST">
-                            <input type="hidden" name="__action" value="updateStudent" />
-                            <input type="hidden" name="id" value="<%= student.id %>" />
-                            <label>FirstName: </label>
-                            <input type="text" name="firstName" value="<%= student.firstname %>" />
-                            <br/>
-                            <label>LastName: </label>
-                            <input type="text" name="lastName" value="<%= student.lastname %>" />
-                            <br/>
-                            <label>Netid: </label>
-                            <input type="text" name="netid" value="<%= student.netid %>" />
-                            <br/>
-                            <label>Major: </label>
-                            <input type="text" name="major" value="<%= student.major %>" />
-                            <button type="submit">
-                                Update Info
-                            </button>
-                        </form>
-                    </li>
+                    <%= student.firstname %> <%= student.lastname %> <%= student.major %> (<%= student.uin %> <%= student.ci_name %> <%= student.ci_term %> <%= student.ci_year %>)
+                    <form method="POST">
+                        <input type="hidden" name="__action" value="updateStudent" />
+                        <input type="hidden" name="id" value="<%= student.id %>" />
+                        <label>FirstName: </label>
+                        <input type="text" name="firstName" value="<%= student.firstname %>" />
+                        <br/>
+                        <label>LastName: </label>
+                        <input type="text" name="lastName" value="<%= student.lastname %>" />
+                        <br/>
+                        <label>Netid: </label>
+                        <input type="text" name="netid" value="<%= student.netid %>" />
+                        <br/>
+                        <label>Major: </label>
+                        <input type="text" name="major" value="<%= student.major %>" />
+                        <button type="submit">
+                            Update Info
+                        </button>
+                    </form>
+                </li>
                 <% }) %>
             </ul>
         </div>
