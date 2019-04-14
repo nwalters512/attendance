@@ -13,6 +13,9 @@
               method='POST' 
               encType="multipart/form-data">
             <input type="hidden" name="__action" value="uploadRoster" />
+            <input type="hidden" name="courseInstanceTerm" value="<%= instTerm %>">
+            <input type="hidden" name="courseInstanceName" value="<%= instName %>">
+            <input type="hidden" name="courseInstanceYear" value="<%= instYear %>">
             <label for="rosterFile">Choose roster file to upload</label>
             <input id="rosterFile" type="file" onchange="this.form.submit()" name="rosterFile" />
         </form>

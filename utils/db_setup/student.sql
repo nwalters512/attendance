@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS students (
   firstName       varchar(80),
   lastName        varchar(80),
   preferredName   varchar(160),
-  admit_term      varchar(20),
+  admitTerm       varchar(20),
   major           varchar(40),
   credits         smallint,
   PRIMARY KEY (UIN, ci_term, ci_name, ci_year),

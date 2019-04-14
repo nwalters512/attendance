@@ -3,7 +3,6 @@ const router = require('express').Router({ mergeParams: true })
 const fileUpload = require('express-fileupload')
 const { sqlLoader } = require('@prairielearn/prairielib')
 const csvParse = require('csv-parse/lib/sync')
-//const parse = require('csv-parse')
 const dbDriver = require('../../dbDriver')
 const asyncErrorHandler = require('../../asyncErrorHandler')
 const checks = require('../../auth/checks')
@@ -12,6 +11,16 @@ const sql = sqlLoader.loadSqlEquiv(__filename)
 
 // Used to sanitize UTF-8 strings
 const utf8Re = /(?![\x00-\x7F]|[\xC0-\xDF][\x80-\xBF]|[\xE0-\xEF][\x80-\xBF]{2}|[\xF0-\xF7][\x80-\xBF]{3})./g
+
+const rosterCsvHeadingMap = {
+  'Net ID': 'netid',
+  'Admit Term': 'admitTerm',
+  'Last Name': 'lastName',
+  'First Name': 'firstName',
+  'Preferred Name': 'preferredName',
+  'Email Address': 'emailAddress',
+  'Major 1 Name': 'majorName',
+}
 
 router.use(
   fileUpload({
@@ -47,14 +56,14 @@ router.get(
     res.locals.instTerm = instRow.ci_term
     res.locals.instName = instRow.ci_name
     res.locals.instYear = instRow.ci_year
-    res.locals.sections = resultSec.rows
+    res.locals.sections = resultSec.rows.filter(r => r.name)
 
     const resultMeet = await dbDriver.asyncQuery(
       sql.select_meetings_join_course_instances,
       { instId: req.params.courseInstanceId }
     )
 
-    res.locals.meetings = resultMeet.rows
+    res.locals.meetings = resultMeet.rows.filter(r => r.name)
     res.render(__filename.replace(/\.js/, '.ejs'), res.locals)
   })
 )
@@ -99,16 +108,24 @@ router.post(
       await dbDriver.asyncQuery(sql.insert_meetings_sm, params)
     } else if (req.body.__action === 'uploadRoster') {
       if (Object.keys(req.files).length === 0) {
-        // TODO flash err
-        console.error('No files uploaded!')
+        req.flash('error', 'No files uploaded!')
+        res.redirect(req.originalUrl)
         return
       }
-      const rosterFile = req.files.rosterFile
+      const reqFiles = req.files
+      const rosterFile = reqFiles.rosterFile
       if (rosterFile === null || rosterFile === undefined) {
-        // TODO flash err
+        ERR("Failed to receive 'rosterFile' in POST request!", next)
+        return
       }
-      if (rosterFile.data === null || rosterFile === undefined) {
-        // TODO flash err
+      if (rosterFile.data === null || rosterFile.data === undefined) {
+        ERR(
+          new Error(
+            `Internal Error: \'rosterFile\' has an invalid or ``non-existent \'data\' attribute!`
+          ),
+          next
+        )
+        return
       }
       const rosterCSVString = new TextDecoder()
         .decode(rosterFile.data)
@@ -118,7 +135,11 @@ router.post(
         skip_empty_lines: true,
         encoding: 'UTF-8',
       })
-      let params = {}
+      let params = {
+        ciTerm: [],
+        ciName: [],
+        ciYear: [],
+      }
       for (const entry of rosterData) {
         for (const key of Object.keys(entry)) {
           if (!params.hasOwnProperty(key)) {
@@ -127,48 +148,27 @@ router.post(
             params[key].push(entry[key])
           }
         }
+        params.ciTerm.push(req.body.courseInstanceTerm)
+        params.ciName.push(req.body.courseInstanceName)
+        params.ciYear.push(req.body.courseInstanceYear)
       }
-      if (Object.keys(params).length === 0) {
-        // TODO flash err
+      if (params.ciName.length === 0) {
+        req.flash(
+          'warn',
+          'Roster file uploaded does not seem to have any entries'
+        )
+        req.redirect(req.originalUrl)
+        return
+      }
+      for (const heading of Object.keys(rosterCsvHeadingMap)) {
+        Object.defineProperty(
+          params,
+          rosterCsvHeadingMap[heading],
+          Object.getOwnPropertyDescriptor(params, heading)
+        )
+        delete params[heading]
       }
       await dbDriver.asyncQuery(sql.insert_update_roster, params)
-      /* Following code setup the same way as sync fails (we use sync in zephyr)
-        parse(rosterCSVString, {
-            columns: true,
-            skip_empty_lines: true,
-            encoding: 'UTF-8'
-        }, (err, rosterData) => {
-            if (err) {
-        // TODO flash err
-                return
-            }
-            let rosterObject = {}
-            for (const entry of rosterData) {
-                for (const key of Object.keys(entry)) {
-                    if (!rosterObject.hasOwnProperty(key)) {
-                        rosterObject[key] = [entry[key]]
-                    } else {
-                        rosterObject[key].push(entry[key])
-                    }
-                }
-            }
-            // TODO sql query
-            console.log(rosterObject)
-            res.redirect(req.originalUrl)
-        })
-             * Stack trace is completely internal so assuming for some reason the async version of this CSV parser is broken
-             * TypeError [ERR_INVALID_ARG_TYPE]: The "buf" argument must be one of type Buffer, TypedArray, or DataView. Received type object
-             * at StringDecoder.write (string_decoder.js:74:11)
-             * at readableAddChunk (_stream_readable.js:263:33)
-             * at Parser.Readable.push (_stream_readable.js:224:10)
-             * at Parser.Transform.push (_stream_transform.js:151:32)
-             * at Parser.__onRow (/home/binary-eater/Documents/cs411-attendance/node_modules/csv-parse/lib/index.js:629:18)
-             * at Parser.__parse (/home/binary-eater/Documents/cs411-attendance/node_modules/csv-parse/lib/index.js:496:40)
-             * at Parser._transform (/home/binary-eater/Documents/cs411-attendance/node_modules/csv-parse/lib/index.js:340:22)
-             * at Parser.Transform._read (_stream_transform.js:190:10)
-             * at Parser.Transform._write (_stream_transform.js:178:12)
-             * at doWrite (_stream_writable.js:415:12) 
-             */
     }
     res.redirect(req.originalUrl)
   })
