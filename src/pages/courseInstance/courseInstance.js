@@ -9,8 +9,8 @@ const checks = require('../../auth/checks')
 
 const sql = sqlLoader.loadSqlEquiv(__filename)
 
-// Used to sanitize UTF-8 strings
-const utf8Re = /(?![\x00-\x7F]|[\xC0-\xDF][\x80-\xBF]|[\xE0-\xEF][\x80-\xBF]{2}|[\xF0-\xF7][\x80-\xBF]{3})./g
+// Used to sanitize UTF-8 strings and remove BOM from UTF-8 CSV encodings
+const utf8Re = /(?![\x20-\x7F]|[\xC0-\xDF][\x80-\xBF]|[\xE0-\xEF][\x80-\xBF]{2}|[\xF0-\xF7][\x80-\xBF]{3})./g
 
 const rosterCsvHeadingMap = {
   'Net ID': 'netid',
@@ -112,8 +112,7 @@ router.post(
         res.redirect(req.originalUrl)
         return
       }
-      const reqFiles = req.files
-      const rosterFile = reqFiles.rosterFile
+      const { rosterFile } = req.files
       if (rosterFile === null || rosterFile === undefined) {
         ERR("Failed to receive 'rosterFile' in POST request!", next)
         return
@@ -121,7 +120,7 @@ router.post(
       if (rosterFile.data === null || rosterFile.data === undefined) {
         ERR(
           new Error(
-            `Internal Error: \'rosterFile\' has an invalid or ``non-existent \'data\' attribute!`
+            "Internal Error: 'rosterFile' has an invalid or non-existent 'data' attribute!"
           ),
           next
         )
@@ -135,23 +134,23 @@ router.post(
         skip_empty_lines: true,
         encoding: 'UTF-8',
       })
-      let params = {
+      const params = {
         ciTerm: [],
         ciName: [],
         ciYear: [],
       }
-      for (const entry of rosterData) {
-        for (const key of Object.keys(entry)) {
-          if (!params.hasOwnProperty(key)) {
+      rosterData.forEach(entry => {
+        Object.keys(entry).forEach(key => {
+          if (params[key] === undefined || params[key] === null) {
             params[key] = [entry[key]]
           } else {
             params[key].push(entry[key])
           }
-        }
+        })
         params.ciTerm.push(req.body.courseInstanceTerm)
         params.ciName.push(req.body.courseInstanceName)
         params.ciYear.push(req.body.courseInstanceYear)
-      }
+      })
       if (params.ciName.length === 0) {
         req.flash(
           'warn',
@@ -160,14 +159,14 @@ router.post(
         req.redirect(req.originalUrl)
         return
       }
-      for (const heading of Object.keys(rosterCsvHeadingMap)) {
+      Object.keys(rosterCsvHeadingMap).forEach(heading => {
         Object.defineProperty(
           params,
           rosterCsvHeadingMap[heading],
           Object.getOwnPropertyDescriptor(params, heading)
         )
         delete params[heading]
-      }
+      })
       await dbDriver.asyncQuery(sql.insert_update_roster, params)
     }
     res.redirect(req.originalUrl)
