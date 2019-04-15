@@ -1,15 +1,19 @@
-// const ERR = require('async-stacktrace')
 const router = require('express').Router({ mergeParams: true })
 const { sqlLoader } = require('@prairielearn/prairielib')
 const dbDriver = require('../../dbDriver')
 const asyncErrorHandler = require('../../asyncErrorHandler')
-// const checks = require('../../auth/checks')
+const checks = require('../../auth/checks')
 
 const sql = sqlLoader.loadSqlEquiv(__filename)
 
 router.get(
   '/',
   asyncErrorHandler(async (req, res, _next) => {
+    if (!(await checks.isLoggedIn(req))) {
+      res.redirect('/login') // TODO: redirect back after login
+      return
+    }
+
     const courseInstance = (await dbDriver.asyncQuery(
       sql.select_course_instance,
       { id: req.params.courseInstanceId }
