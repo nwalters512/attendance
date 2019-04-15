@@ -6,7 +6,22 @@
   <body>
     <%- include('../partials/header') %>
     <div class="container">
-      Testing
+      <h1>Analytics for student <%= student.uin %></h1>
+      <ul class="list-group mb-3">
+      <% meetings.forEach(function (meeting) { %>
+        <li class="list-group-item">
+          <%= meeting.name %>
+        </li>
+      <% }) %>
+      </ul>
+      <p>
+        Student has attended <strong><%= studentAttendedMeetingsCount %> out of <%= meetings.length %></strong> meetings
+        for an attendance rate of <%= (studentAttendedMeetingsCount * 100 / meetings.length).toFixed(2) %>%.
+      </p>
+      <p>
+        Of all these meetings, <strong><%= attendedMeetingsCount %></strong> have had any students swipe in. For such
+        meetings, the student has an attendance rate of <%= (studentAttendedMeetingsCount * 100 / attendedMeetingsCount).toFixed(2) %>%.
+      </p>
     </div>
   </body>
 </html>
