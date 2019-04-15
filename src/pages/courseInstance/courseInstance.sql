@@ -70,3 +70,47 @@ AND meetings.ci_year = $ciYear
 AND sections.ci_term = $ciTerm
 AND sections.ci_name = $ciName
 AND sections.ci_year = $ciYear;
+
+-- BLOCK insert_update_roster
+INSERT INTO students (
+    netid,
+    UIN,
+    ci_term,
+    ci_name,
+    ci_year,
+    lastName,
+    firstName,
+    preferredName,
+    email,
+    college,
+    major,
+    admitTerm,
+    credits,
+    level
+)
+SELECT * FROM UNNEST (
+    $netid::text[], 
+    $UIN::bigint[],
+    $ciTerm::text[],
+    $ciName::text[],
+    $ciYear::smallint[], 
+    $lastName::text[], 
+    $firstName::text[],
+    $preferredName::text[],
+    $emailAddress::text[],
+    $College::text[],
+    $majorName::text[],
+    $admitTerm::text[],
+    $Credit::smallint[],
+    $Level::text[]
+)
+ON CONFLICT (UIN, ci_term, ci_name, ci_year) DO UPDATE
+    SET netid = excluded.netid,
+        lastName = excluded.lastName,
+        firstName = excluded.firstName,
+        email = excluded.email,
+        college = excluded.college,
+        major = excluded.major,
+        admitTerm = excluded.admitTerm,
+        credits = excluded.credits,
+        level = excluded.level;

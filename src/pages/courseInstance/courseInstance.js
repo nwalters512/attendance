@@ -1,11 +1,32 @@
 const ERR = require('async-stacktrace')
 const router = require('express').Router({ mergeParams: true })
+const fileUpload = require('express-fileupload')
 const { sqlLoader } = require('@prairielearn/prairielib')
+const csvParse = require('csv-parse/lib/sync')
 const dbDriver = require('../../dbDriver')
 const asyncErrorHandler = require('../../asyncErrorHandler')
 const checks = require('../../auth/checks')
 
 const sql = sqlLoader.loadSqlEquiv(__filename)
+
+// Used to sanitize UTF-8 strings and remove BOM from UTF-8 CSV encodings
+const utf8Re = /(?![\x20-\x7F]|[\xC0-\xDF][\x80-\xBF]|[\xE0-\xEF][\x80-\xBF]{2}|[\xF0-\xF7][\x80-\xBF]{3})./g
+
+const rosterCsvHeadingMap = {
+  'Net ID': 'netid',
+  'Admit Term': 'admitTerm',
+  'Last Name': 'lastName',
+  'First Name': 'firstName',
+  'Preferred Name': 'preferredName',
+  'Email Address': 'emailAddress',
+  'Major 1 Name': 'majorName',
+}
+
+router.use(
+  fileUpload({
+    safeFileNames: true,
+  })
+)
 
 router.get(
   '/',
@@ -35,14 +56,14 @@ router.get(
     res.locals.instTerm = instRow.ci_term
     res.locals.instName = instRow.ci_name
     res.locals.instYear = instRow.ci_year
-    res.locals.sections = resultSec.rows
+    res.locals.sections = resultSec.rows.filter(r => r.name)
 
     const resultMeet = await dbDriver.asyncQuery(
       sql.select_meetings_join_course_instances,
       { instId: req.params.courseInstanceId }
     )
 
-    res.locals.meetings = resultMeet.rows
+    res.locals.meetings = resultMeet.rows.filter(r => r.name)
     res.render(__filename.replace(/\.js/, '.ejs'), res.locals)
   })
 )
@@ -85,6 +106,68 @@ router.post(
       }
       await dbDriver.asyncQuery(sql.insert_meetings, params)
       await dbDriver.asyncQuery(sql.insert_meetings_sm, params)
+    } else if (req.body.__action === 'uploadRoster') {
+      if (Object.keys(req.files).length === 0) {
+        req.flash('error', 'No files uploaded!')
+        res.redirect(req.originalUrl)
+        return
+      }
+      const { rosterFile } = req.files
+      if (rosterFile === null || rosterFile === undefined) {
+        ERR("Failed to receive 'rosterFile' in POST request!", next)
+        return
+      }
+      if (rosterFile.data === null || rosterFile.data === undefined) {
+        ERR(
+          new Error(
+            "Internal Error: 'rosterFile' has an invalid or non-existent 'data' attribute!"
+          ),
+          next
+        )
+        return
+      }
+      const rosterCSVString = new TextDecoder()
+        .decode(rosterFile.data)
+        .replace(utf8Re, '')
+      const rosterData = csvParse(rosterCSVString, {
+        columns: true,
+        skip_empty_lines: true,
+        encoding: 'UTF-8',
+      })
+      const params = {
+        ciTerm: [],
+        ciName: [],
+        ciYear: [],
+      }
+      rosterData.forEach(entry => {
+        Object.keys(entry).forEach(key => {
+          if (params[key] === undefined || params[key] === null) {
+            params[key] = [entry[key]]
+          } else {
+            params[key].push(entry[key])
+          }
+        })
+        params.ciTerm.push(req.body.courseInstanceTerm)
+        params.ciName.push(req.body.courseInstanceName)
+        params.ciYear.push(req.body.courseInstanceYear)
+      })
+      if (params.ciName.length === 0) {
+        req.flash(
+          'warn',
+          'Roster file uploaded does not seem to have any entries'
+        )
+        req.redirect(req.originalUrl)
+        return
+      }
+      Object.keys(rosterCsvHeadingMap).forEach(heading => {
+        Object.defineProperty(
+          params,
+          rosterCsvHeadingMap[heading],
+          Object.getOwnPropertyDescriptor(params, heading)
+        )
+        delete params[heading]
+      })
+      await dbDriver.asyncQuery(sql.insert_update_roster, params)
     }
     res.redirect(req.originalUrl)
   })
