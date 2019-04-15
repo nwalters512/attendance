@@ -42,10 +42,10 @@ router.get(
     const secMeetingRow = result.rows[0]
     res.locals.sectionName = secMeetingRow.s_name
     res.locals.meetingName = secMeetingRow.m_name
-    res.locals.ciTerm = secMeetingRow.s_ci_term
-    res.locals.ciName = secMeetingRow.s_ci_name
-    res.locals.ciYear = secMeetingRow.s_ci_year
-    res.locals.swipes = result.rows
+    res.locals.ciTerm = secMeetingRow.ci_term
+    res.locals.ciName = secMeetingRow.ci_name
+    res.locals.ciYear = secMeetingRow.ci_year
+    res.locals.swipes = result.rows.filter(r => r.uin)
     res.render(__filename.replace(/\.js$/, '.ejs'), res.locals)
   })
 )

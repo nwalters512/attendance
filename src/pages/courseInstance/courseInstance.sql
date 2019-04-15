@@ -42,8 +42,8 @@ VALUES
     ($name, $ciTerm, $ciName, $ciYear, $CRN);
 
 -- BLOCK insert_sections_sm
-INSERT INTO section_meetings (m_name, m_ci_term, m_ci_name, m_ci_year, s_name, s_ci_term, s_ci_name, s_ci_year)
-    SELECT meetings.name, meetings.ci_term, meetings.ci_name, meetings.ci_year, sections.name, sections.ci_term, sections.ci_name, sections.ci_year
+INSERT INTO section_meetings (m_name, ci_term, ci_name, ci_year, s_name)
+    SELECT meetings.name, meetings.ci_term, meetings.ci_name, meetings.ci_year, sections.name
     FROM meetings, sections
     WHERE sections.name = $name
     AND meetings.ci_term = $ciTerm
@@ -60,8 +60,8 @@ VALUES
     ($name, $ciTerm, $ciName, $ciYear);
 
 -- BLOCK insert_meetings_sm
-INSERT INTO section_meetings (m_name, m_ci_term, m_ci_name, m_ci_year, s_name, s_ci_term, s_ci_name, s_ci_year)
-SELECT meetings.name, meetings.ci_term, meetings.ci_name, meetings.ci_year, sections.name, sections.ci_term, sections.ci_name, sections.ci_year
+INSERT INTO section_meetings (m_name, s_name, ci_term, ci_name, ci_year)
+SELECT meetings.name, sections.name, sections.ci_term, sections.ci_name, sections.ci_year
 FROM meetings, sections
 WHERE meetings.name = $name
 AND meetings.ci_term = $ciTerm
