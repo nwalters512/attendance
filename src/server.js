@@ -60,6 +60,14 @@ function createApp() {
     '/courseInstance/:courseInstanceId',
     require('./pages/courseInstance/courseInstance')
   )
+  app.use(
+    '/courseInstance/:courseInstanceId/analytics',
+    require('./pages/courseInstanceAnalytics/courseInstanceAnalytics')
+  )
+  app.use(
+    '/courseInstance/:courseInstanceId/analytics/student/:studentId',
+    require('./pages/courseInstanceStudentAnalytics/courseInstanceStudentAnalytics')
+  )
   app.use('/section/:sectionId', require('./pages/section/section'))
   app.use('/meeting/:meetingId', require('./pages/meeting/meeting'))
   app.use(

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/server.js",
-    "start:watch": "nodemon src/server.js",
+    "start:watch": "nodemon -e js,sql src/server.js",
     "dev": "node src/server.js",
     "lint": "eslint --ext js ./src",
     "fix-lint": "npm run lint -- --fix",
