@@ -6,7 +6,16 @@
   <body>
     <%- include('../partials/header') %>
     <div class="container">
-      Testing
+      <h1>Students</h1>
+      <ul class="list-group">
+      <% students.forEach(function (student) { %>
+        <li class="list-group-item">
+          <a href="/courseInstance/<%= courseInstance.id %>/analytics/student/<%= student.id %>">
+            <%= student.uin %>
+          </a>
+        </li>
+      <% }) %>
+      </ul>
     </div>
   </body>
 </html>
