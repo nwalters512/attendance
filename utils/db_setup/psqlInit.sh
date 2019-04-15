@@ -11,6 +11,7 @@ sudo -i -u postgres sh -c "psql -a -f ${TEMP_DIR}/dbInit.sql"
 
 # Independent Schemas
 indepSchemas=(
+    "session.sql"
     "course.sql"
     "user.sql"
 )
