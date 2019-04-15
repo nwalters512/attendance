@@ -10,7 +10,8 @@
       <ul class="list-group mb-3">
       <% meetings.forEach(function (meeting) { %>
         <li class="list-group-item">
-          <%= meeting.name %>
+          <%= meeting.name %></br>
+          <span class="text-muted small">(attended <%= meeting.student_attendance_count %> times)</span>
         </li>
       <% }) %>
       </ul>
