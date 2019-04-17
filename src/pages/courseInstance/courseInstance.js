@@ -35,6 +35,15 @@ router.get(
       res.redirect('/login') // TODO: redirect back after login
       return
     }
+    if (
+      !(await checks.staffHasPermissionsForCourseInstance(
+        req,
+        req.params.courseInstanceId
+      ))
+    ) {
+      res.sendStatus(403)
+      return
+    }
     res.locals.courseInstanceId = req.params.courseInstanceId
 
     const resultSec = await dbDriver.asyncQuery(
@@ -58,6 +67,17 @@ router.get(
     res.locals.instYear = instRow.ci_year
     res.locals.sections = resultSec.rows.filter(r => r.name)
 
+    const params = {
+      ciYear: instRow.ci_year,
+      ciName: instRow.ci_name,
+      ciTerm: instRow.ci_term,
+    }
+
+    res.locals.courseStaff = (await dbDriver.asyncQuery(
+      sql.select_staff,
+      params
+    )).rows
+
     const resultMeet = await dbDriver.asyncQuery(
       sql.select_meetings_join_course_instances,
       { instId: req.params.courseInstanceId }
@@ -72,6 +92,15 @@ router.post(
   '/',
   asyncErrorHandler(async (req, res, next) => {
     if (!checks.isLoggedIn(req)) {
+      res.sendStatus(403)
+      return
+    }
+    if (
+      !(await checks.staffHasPermissionsForCourseInstance(
+        req,
+        req.params.courseInstanceId
+      ))
+    ) {
       res.sendStatus(403)
       return
     }
@@ -168,7 +197,71 @@ router.post(
         delete params[heading]
       })
       await dbDriver.asyncQuery(sql.insert_update_roster, params)
+    } else if (req.body.__action === 'addStaff') {
+      if (
+        !(await checks.staffHasPermissionsForCourseInstance(
+          req,
+          req.params.courseInstanceId
+        ))
+      ) {
+        req.flash('error', 'Must be on staff to add staff')
+        res.redirect(req.originalUrl)
+        return
+      }
+
+      const params = {
+        email: req.body.email.trim(),
+        ciTerm: req.body.courseInstanceTerm,
+        ciYear: req.body.courseInstanceYear,
+        ciName: req.body.courseInstanceName,
+      }
+
+      const results = await dbDriver.asyncQuery(sql.add_staff, params)
+
+      if (results.rowCount === 1) {
+        req.flash('info', `Added ${req.body.email.trim()} to staff`)
+      } else {
+        req.flash('error', `Could not add ${req.body.email.trim()} to staff`)
+      }
+    } else if (req.body.__action === 'removeStaff') {
+      if (
+        !(await checks.staffHasPermissionsForCourseInstance(
+          req,
+          req.params.courseInstanceId
+        ))
+      ) {
+        req.flash('error', 'Must be on staff to remove staff')
+        res.redirect(req.originalUrl)
+        return
+      }
+
+      if (req.user.email === req.body.email.trim()) {
+        req.flash('error', 'Cannot remove yourself as staff!')
+        res.redirect(req.originalUrl)
+        return
+      }
+
+      const params = {
+        email: req.body.email.trim(),
+        ciTerm: req.body.courseInstanceTerm,
+        ciYear: req.body.courseInstanceYear,
+        ciName: req.body.courseInstanceName,
+      }
+
+      const results = await dbDriver.asyncQuery(sql.remove_staff, params)
+
+      if (results.rowCount === 1) {
+        req.flash('info', `Removed ${req.body.email.trim()}`)
+      } else {
+        ERR(
+          new Error(
+            `Did not get 1 row on remove_staff. Got: ${results.rowCount}`
+          ),
+          next
+        )
+      }
     }
+
     res.redirect(req.originalUrl)
   })
 )

@@ -114,3 +114,22 @@ ON CONFLICT (UIN, ci_term, ci_name, ci_year) DO UPDATE
         admitTerm = excluded.admitTerm,
         credits = excluded.credits,
         level = excluded.level;
+
+
+-- BLOCK select_staff
+SELECT * FROM user_assists_course_instance INNER JOIN users
+ON (user_assists_course_instance.email = users.email)
+WHERE ci_term = $ciTerm AND ci_name = $ciName AND ci_year = $ciYear;
+
+
+-- BLOCK add_staff
+INSERT INTO user_assists_course_instance
+    (email, ci_term, ci_name, ci_year)
+VALUES
+    ($email, $ciTerm, $ciName, $ciYear);
+
+
+-- BLOCK remove_staff
+DELETE FROM user_assists_course_instance
+WHERE ci_term = $ciTerm AND ci_year = $ciYear
+AND ci_name = $ciName AND email = $email;
