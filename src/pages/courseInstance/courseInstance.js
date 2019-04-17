@@ -2,6 +2,10 @@ const ERR = require('async-stacktrace')
 const router = require('express').Router({ mergeParams: true })
 const fileUpload = require('express-fileupload')
 const { sqlLoader } = require('@prairielearn/prairielib')
+const {
+  FOREIGN_KEY_VIOLATION,
+  UNIQUE_VIOLATION,
+} = require('pg-error-constants')
 const csvParse = require('csv-parse/lib/sync')
 const dbDriver = require('../../dbDriver')
 const asyncErrorHandler = require('../../asyncErrorHandler')
@@ -216,7 +220,20 @@ router.post(
         ciName: req.body.courseInstanceName,
       }
 
-      const results = await dbDriver.asyncQuery(sql.add_staff, params)
+      let results
+      try {
+        results = await dbDriver.asyncQuery(sql.add_staff, params)
+      } catch (e) {
+        if (e.code && e.code === UNIQUE_VIOLATION) {
+          req.flash('error', 'Cannot add duplicate staff member')
+        } else if (e.code && e.code === FOREIGN_KEY_VIOLATION) {
+          req.flash('error', 'User does not exist')
+        } else {
+          ERR(new Error(`Error adding staff: ${e}`), next)
+        }
+        res.redirect(req.originalUrl)
+        return
+      }
 
       if (results.rowCount === 1) {
         req.flash('info', `Added ${req.body.email.trim()} to staff`)

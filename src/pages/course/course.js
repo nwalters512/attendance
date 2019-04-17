@@ -1,7 +1,10 @@
 const ERR = require('async-stacktrace')
 const router = require('express').Router({ mergeParams: true })
 const { sqlLoader } = require('@prairielearn/prairielib')
-const { UNIQUE_VIOLATION } = require('pg-error-constants')
+const {
+  FOREIGN_KEY_VIOLATION,
+  UNIQUE_VIOLATION,
+} = require('pg-error-constants')
 const dbDriver = require('../../dbDriver')
 const asyncErrorHandler = require('../../asyncErrorHandler')
 const checks = require('../../auth/checks')
@@ -92,7 +95,20 @@ router.post(
         email: req.body.email.trim(),
       }
 
-      const result = await dbDriver.asyncQuery(sql.add_owner, params)
+      let result
+      try {
+        result = await dbDriver.asyncQuery(sql.add_owner, params)
+      } catch (e) {
+        if (e.code && e.code === UNIQUE_VIOLATION) {
+          req.flash('error', 'Cannot add duplicate owner')
+        } else if (e.code && e.code === FOREIGN_KEY_VIOLATION) {
+          req.flash('error', 'User does not exist')
+        } else {
+          ERR(new Error(`Error adding owner: ${e}`), next)
+        }
+        res.redirect(req.originalUrl)
+        return
+      }
 
       if (result.rowCount === 0) {
         req.flash('error', `No user with email ${req.body.email.trim()}`)
