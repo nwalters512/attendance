@@ -258,13 +258,14 @@ router.post(
         return
       }
 
-      const cId = (await dbDriver.asyncQuery(sql.select_course_instances, {
+      const cName = (await dbDriver.asyncQuery(sql.select_course_instances, {
         instId: req.params.courseInstanceId,
-      })).rows[0].id
+      })).rows[0].course_name
+
       if (
-        await checks.staffIsOwnerOfCourse(
+        await checks.staffIsOwnerOfCourseByName(
           { user: { email: req.body.email.trim() } },
-          cId
+          cName
         )
       ) {
         req.flash('error', 'Cannot remove a course owner from staff')

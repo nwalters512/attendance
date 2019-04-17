@@ -19,6 +19,14 @@ INSERT INTO user_assists_course_instance
 VALUES
   ($email, $term, $name, $year)
 
+-- BLOCK give_owners_instance_access
+INSERT INTO user_assists_course_instance 
+  (email, ci_term, ci_name, ci_year)
+SELECT is_owner.email, $term, $name, $year
+FROM is_owner
+WHERE is_owner.name = $course_name
+ON CONFLICT DO NOTHING;
+
 -- BLOCK select_owners
 SELECT *, is_owner.name AS course_name FROM is_owner INNER JOIN users ON
     (is_owner.email = users.email)

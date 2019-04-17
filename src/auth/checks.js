@@ -9,7 +9,20 @@ checks.isLoggedIn = async req => {
   return req.user !== undefined && req.user !== null
 }
 
-// consider a version which takes the primary key (only the name)
+checks.staffIsOwnerOfCourseByName = async (req, courseName) => {
+  const params = {
+    userEmail: req.user.email,
+    courseName,
+  }
+
+  const results = await dbDriver.asyncQuery(
+    sql.get_user_is_owner_for_course_by_name,
+    params
+  )
+
+  return results.rows.length > 0
+}
+
 checks.staffIsOwnerOfCourse = async (req, courseId) => {
   const params = {
     userEmail: req.user.email,

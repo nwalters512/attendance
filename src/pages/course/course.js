@@ -67,7 +67,8 @@ router.post(
         course_name: req.body.courseName,
       }
       if (Number.isNaN(params.year)) {
-        ERR(new Error(`Invalid year: ${req.body.year}`), next)
+        req.flash('error', `Invalid year: ${req.body.year}`)
+        res.redirect(req.originalUrl)
         return
       }
       try {
@@ -83,6 +84,7 @@ router.post(
       params.email = req.user.email
 
       await dbDriver.asyncQuery(sql.give_instance_access, params)
+      await dbDriver.asyncQuery(sql.give_owners_instance_access, params)
     } else if (req.body.__action === 'addOwner') {
       if (!(await checks.staffIsOwnerOfCourse(req, req.params.courseId))) {
         req.flash('error', 'Must be owner to add new owners!')
