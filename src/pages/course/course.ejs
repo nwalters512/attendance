@@ -56,15 +56,51 @@
         </div>
       </div>
       <div class="list-group">
-        <% course_instances.forEach(function(course_inst) { %>
+        <% courseInstances.forEach(function(courseInst) { %>
         <a
-          href="/courseInstance/<%= course_inst.id %>"
+          href="/courseInstance/<%= courseInst.id %>"
           class="list-group-item d-flex justify-content-between align-items-center"
         >
-          <%= course_inst.name %>
+          <%= courseInst.name %>
         </a>
         <% }) %>
       </div>
+
+    <h2>Course Owners</h2>
+      <div class="list-group">
+          <% courseOwners.forEach( (owner) => { %>
+          <div class="list-group-item d-flex justify-content-between align-items-center">
+              <span> <%= owner.email %> (<%= owner.name %>)</span>
+
+          <form method="POST">
+            <input type="hidden" name="__action" value="removeOwner" />
+            <input type="hidden" name="email" value=<%= owner.email %> />
+            <button type="submit" class="btn btn-sm btn-outline-danger">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </form>
+          </div>  
+          <% }); %>
+      </div>
+
+      <br/>
+
+      <form method="POST">
+          <input type="hidden" name="__action" value="addOwner" />
+          <input
+              name="email"
+              id="emailEntry"
+              placeholder="someone@illinois.edu"
+              />
+          <button
+              role="button"
+              class="btn btn-primary mb-3"
+              type="submit"
+              >
+              <span>Add Owner</span>
+          </button>
+      </form>
+      
     </div>
   </body>
 </html>

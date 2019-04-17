@@ -18,3 +18,21 @@ INSERT INTO user_assists_course_instance
   (email, ci_term, ci_name, ci_year)
 VALUES
   ($email, $term, $name, $year)
+
+-- BLOCK select_owners
+SELECT *, is_owner.name AS course_name FROM is_owner INNER JOIN users ON
+    (is_owner.email = users.email)
+WHERE is_owner.name = $courseName;
+
+-- BLOCK add_owner
+INSERT INTO is_owner
+    (name, email)
+SELECT courses.name, $email
+FROM courses
+WHERE courses.id = $courseId
+LIMIT 1;
+
+-- BLOCK remove_owner
+DELETE FROM is_owner
+WHERE name = (SELECT courses.name FROM courses WHERE id = $courseId) 
+AND email = $email;

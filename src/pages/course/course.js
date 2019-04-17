@@ -31,15 +31,14 @@ router.get(
     res.locals.courseDept = courseRow.dept
     res.locals.courseNumber = courseRow.number
     res.locals.courseName = courseRow.course_name
-    if (
-      result.rows.length >= 1 &&
-      courseRow.name !== undefined &&
-      courseRow.name !== null
-    ) {
-      res.locals.course_instances = result.rows
-    } else {
-      res.locals.course_instances = []
-    }
+    res.locals.courseInstances = result.rows.filter(r => r.name)
+
+    const ownerResult = await dbDriver.asyncQuery(sql.select_owners, {
+      courseName: courseRow.course_name,
+    })
+
+    res.locals.courseOwners = ownerResult.rows
+
     res.render(__filename.replace(/\.js$/, '.ejs'), res.locals)
   })
 )
@@ -81,6 +80,55 @@ router.post(
       params.email = req.user.email
 
       await dbDriver.asyncQuery(sql.give_instance_access, params)
+    } else if (req.body.__action === 'addOwner') {
+      if (!(await checks.staffIsOwnerOfCourse(req, req.params.courseId))) {
+        req.flash('error', 'Must be owner to add new owners!')
+        res.redirect(req.originalUrl)
+        return
+      }
+
+      const params = {
+        courseId: req.params.courseId,
+        email: req.body.email.trim(),
+      }
+
+      const result = await dbDriver.asyncQuery(sql.add_owner, params)
+
+      if (result.rowCount === 0) {
+        req.flash('error', `No user with email ${req.body.email.trim()}`)
+      } else {
+        req.flash('info', `Added user ${req.body.email.trim()} as an owner`)
+      }
+    } else if (req.body.__action === 'removeOwner') {
+      if (!(await checks.staffIsOwnerOfCourse(req, req.params.courseId))) {
+        req.flash('error', 'Must be owner to remove owners!')
+        res.redirect(req.originalUrl)
+        return
+      }
+
+      if (req.user.email === req.body.email.trim()) {
+        req.flash('error', 'Cannot remove yourself as owner!')
+        res.redirect(req.originalUrl)
+        return
+      }
+
+      const params = {
+        courseId: req.params.courseId,
+        email: req.body.email.trim(),
+      }
+
+      const result = await dbDriver.asyncQuery(sql.remove_owner, params)
+
+      if (result.rowCount === 1) {
+        req.flash('info', `Removed ${req.body.email.trim()}`)
+      } else {
+        ERR(
+          new Error(
+            `Did not get 1 row on remove_owner. Got: ${result.rowCount}`
+          ),
+          next
+        )
+      }
     }
     res.redirect(req.originalUrl)
   })
