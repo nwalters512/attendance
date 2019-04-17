@@ -58,7 +58,7 @@ router.post(
       return
     }
     if (req.body.__action === 'newSwipe') {
-      let uin = req.body.UIN.trim()
+      let uin = req.body.UIN.trim().replace('%B', '')
 
       // attempt to match by netid if it does not start with a number
       if (uin.length > 0 && Number.isNaN(parseInt(uin[0], 10))) {
