@@ -19,6 +19,7 @@ function createApp() {
   app.set('view engine', 'ejs')
   app.use(bodyParser.urlencoded({ extended: false, limit: 200 * 1024 }))
   app.use(bodyParser.json())
+  app.use(express.static('static'))
   app.use(
     session({
       resave: false,
