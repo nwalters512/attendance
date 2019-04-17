@@ -6,7 +6,10 @@ const asyncErrorHandler = require('../../asyncErrorHandler')
 const checks = require('../../auth/checks')
 
 const sql = sqlLoader.loadSqlEquiv(__filename)
-const parser = new Parser()
+const parser = new Parser({ quote: '' })
+
+const csvHeader =
+  'id,m_name,ci_term,ci_name,ci_year,s_name,uin,stu_ci_term,stu_ci_name,stu_ci_year,meeting_name,sec_name'
 
 router.get(
   '/',
@@ -20,11 +23,12 @@ router.get(
       sql.select_swipes_join_section_meetings,
       { sectionMeetingId: req.params.sectionMeetingId }
     )
+    res.attachment('swipes.csv')
     if (result.rows.length === 0) {
+      res.status(200).send(csvHeader)
       return
     }
     const csvResult = parser.parse(result.rows)
-    res.attachment('swipes.csv')
     res.status(200).send(csvResult)
   })
 )
