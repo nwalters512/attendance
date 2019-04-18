@@ -60,34 +60,14 @@ router.get(
     ]
     res.locals.pieContent = pieContent
 
-    const CSAvgAttendence = (await dbDriver.asyncQuery(
-      sql.select_avg_attendance_rate_in_cs,
+    const barContent = (await dbDriver.asyncQuery(
+      sql.select_avg_attendance_rate_by_major,
       {
         ci_term: courseInstance.term,
         ci_name: courseInstance.name,
         ci_year: courseInstance.year,
       }
-    )).rows[0].avg_num_majors_per_section_meeting
-
-    const nonCSAvgAttendence = (await dbDriver.asyncQuery(
-      sql.select_avg_attendance_rate_not_in_cs,
-      {
-        ci_term: courseInstance.term,
-        ci_name: courseInstance.name,
-        ci_year: courseInstance.year,
-      }
-    )).rows[0].avg_num_non_majors_per_section_meeting
-    const barContent = [
-      {
-        major: 'CS',
-        attendenceRate: CSAvgAttendence,
-      },
-      {
-        major: 'Non-CS',
-        attendenceRate: nonCSAvgAttendence,
-      },
-    ]
-
+    )).rows
     res.locals.barContent = barContent
 
     res.render(__filename.replace(/\.js/, '.ejs'), res.locals)
