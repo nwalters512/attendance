@@ -97,7 +97,7 @@ If you need to drop all tables due to a schema change or any other reason, execu
 
 * Clone this repository to your computer
 * Run `npm install` in the newly-cloned directory
-* Run `npm run dev**
+* Run `npm run dev`
 * Go to http://localhost:3000 in your browser to see the application
 
 ## Running the Webserver in Production Mode for Heroku
