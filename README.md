@@ -10,7 +10,7 @@ Order of Instructions To Be Read for Setting Up The Project
 1. Starting Up The Postgres Server
 1. DB Setup And Configuration
 1. Running the Webserver
-1. 
+1. Running the Webserver in Production Mode for Heroku
 
 ## DB Installation And Useful Utilities
 
