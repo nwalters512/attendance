@@ -10,6 +10,7 @@ Order of Instructions To Be Read for Setting Up The Project
 1. Starting Up The Postgres Server
 1. DB Setup And Configuration
 1. Running the Webserver
+1. 
 
 ## DB Installation And Useful Utilities
 
@@ -86,7 +87,7 @@ Example of `<normal-postgres-args>`
 -U attendance-adm -d attendance
 ```
 
-To populate the newly created database with tables, simply run the webapp as explained in `Getting Started`.
+To populate the newly created database with tables, simply run the webapp as explained in `Running the Webserver`.
 
 ### Util Scripts
 
@@ -96,11 +97,21 @@ If you need to drop all tables due to a schema change or any other reason, execu
 
 * Clone this repository to your computer
 * Run `npm install` in the newly-cloned directory
-* Run `npm run dev`
+* Run `npm run dev**
 * Go to http://localhost:3000 in your browser to see the application
+
+## Running the Webserver in Production Mode for Heroku
+
+**Note:** there should be no need to do this manually since the Travis CI config `.travis.yml` will 
+
+* Similar to the instructions in `Running the Webserver` except the following two points
+* Run `npm start` instead of `npm run dev`
+* The port on heroku will be port 80 instead of port 3000
 
 ## Useful Utilities and Resources
 
 * [psql Guide](http://postgresguide.com/utilities/psql.html)
 * [Datagrip](https://www.jetbrains.com/datagrip/) Can be used to back up database instances and import CSVs
 * [ESLint in vim](https://medium.com/usevim/in-editor-linting-with-syntastic-6814122bdbec)
+* [Travis CI Heroku Deployment](https://docs.travis-ci.com/user/deployment/heroku/)
+* [Travis CI Node Setup](https://docs.travis-ci.com/user/languages/javascript-with-nodejs/)
