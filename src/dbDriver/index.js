@@ -6,13 +6,19 @@ const config = require('../lib/config.js')
 
 const dbDriver = module.exports
 
-const pgConf = {
-  host: config.postgresqlHost,
-  port: config.postgresqlPort,
-  user: config.postgresqlUser,
-  password: config.postgresqlPassword,
-  database: config.postgresqlDatabase,
-}
+const pgConf =
+  config.MODE === 'dev'
+    ? {
+        host: config.postgresqlHost,
+        port: config.postgresqlPort,
+        user: config.postgresqlUser,
+        password: config.postgresqlPassword,
+        database: config.postgresqlDatabase,
+      }
+    : {
+        connectionString: process.env.DATABASE_URL,
+        ssl: true,
+      }
 
 dbDriver.initDB = (callback, idleErrCb) => {
   sqlDB.init(pgConf, idleErrCb, err => {
