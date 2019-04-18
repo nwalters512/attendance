@@ -52,33 +52,33 @@ SELECT SUM(majorAggregate.enrollment) AS num_not_cs_in_ci
   WHERE major <> 'CS' OR major IS NULL;
 
 -- BLOCK select_avg_attendance_rate_not_in_cs
-SELECT (SELECT AVG(nonMajorAttendance.attendance) AS avg_attendence_rate_not_cs_in_ci
+SELECT (SELECT AVG(nonMajorAttendance.attendance)
   FROM
     (SELECT COUNT(*) AS attendance
       FROM students
       INNER JOIN section_meetings
-      ON section_meetings.m_ci_term = students.ci_term
-        AND section_meetings.m_ci_name = students.ci_name
-        AND section_meetings.m_ci_year = students.ci_year
-      WHERE (course_instances.term = $ci_term
-        AND course_instances.name = $ci_name
-        AND course_instances.year = $ci_year)
-      GROUP BY major
-    HAVING major <> 'CS' OR major IS NULL) nonMajorAttendance) / COUNT(*) AS avg_num_non_majors_per_section_meeting
-  FROM section_meetings
+      ON section_meetings.ci_term = students.ci_term
+        AND section_meetings.ci_name = students.ci_name
+        AND section_meetings.ci_year = students.ci_year
+      WHERE (section_meetings.ci_term = $ci_term
+        AND section_meetings.ci_name = $ci_name
+        AND section_meetings.ci_year = $ci_year)
+    GROUP BY major
+  HAVING major <> 'CS' OR major IS NULL) nonMajorAttendance) / COUNT(*) AS avg_num_non_majors_per_section_meeting
+FROM section_meetings;
 
   -- BLOCK select_avg_attendance_rate_in_cs
-  SELECT (SELECT AVG(nonMajorAttendance.attendance) AS avg_attendence_rate_cs_in_ci
+  SELECT (SELECT AVG(majorAttendance.attendance)
     FROM
       (SELECT COUNT(*) AS attendance
         FROM students
         INNER JOIN section_meetings
-        ON section_meetings.m_ci_term = students.ci_term
-          AND section_meetings.m_ci_name = students.ci_name
-          AND section_meetings.m_ci_year = students.ci_year
-        WHERE (course_instances.term = $ci_term
-          AND course_instances.name = $ci_name
-          AND course_instances.year = $ci_year)
+        ON section_meetings.ci_term = students.ci_term
+          AND section_meetings.ci_name = students.ci_name
+          AND section_meetings.ci_year = students.ci_year
+        WHERE (section_meetings.ci_term = $ci_term
+          AND section_meetings.ci_name = $ci_name
+          AND section_meetings.ci_year = $ci_year)
         GROUP BY major
-      HAVING major = 'CS') majorAttendance) / COUNT(*) AS avg_num_majors_per_section_meeting
-    FROM section_meetings
+      HAVING major='CS') majorAttendance) / COUNT(*) AS avg_num_majors_per_section_meeting
+    FROM section_meetings;
