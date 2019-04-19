@@ -7,6 +7,21 @@
     <%- include('../partials/header') %>
     <div class="container">
       <h1><%= sectionName %></h1>
+      <form ref='uploadEnrollment' 
+            id='uploadEnrollment' 
+            method='POST' 
+            encType="multipart/form-data">
+          <input type="hidden" name="__action" value="uploadEnrollment" />
+          <input type="hidden" name="sectionName" value="<%= sectionName %>">
+          <input type="hidden" name="courseInstanceTerm" value="<%= instTerm %>">
+          <input type="hidden" name="courseInstanceName" value="<%= instName %>">
+          <input type="hidden" name="courseInstanceYear" value="<%= instYear %>">
+          <label for="enrollmentFile">Choose student enrollment file to upload</label>
+          <input id="enrollmentFile" type="file" name="enrollmentFile" />
+          <br/>
+          <input class="btn btn-success" type="submit" value="Submit Section Enrollment File"/>
+      </form>
+      <br/>
       <h2>Section - Meetings</h2>
       <ul class="list-group">
         <% section_meetings.forEach(function(sec_meeting) { %>
