@@ -1,0 +1,15 @@
+INSERT INTO public.meetings (id, name, ci_term, ci_name, ci_year) VALUES (1, 'lab_huffman', 'Fall  ', 'CS 225', 2018);
+INSERT INTO public.meetings (id, name, ci_term, ci_name, ci_year) VALUES (2, 'lab_inheriance', 'Fall  ', 'CS 225', 2018);
+INSERT INTO public.meetings (id, name, ci_term, ci_name, ci_year) VALUES (3, 'lab_flow', 'Fall  ', 'CS 225', 2018);
+INSERT INTO public.meetings (id, name, ci_term, ci_name, ci_year) VALUES (4, 'lab_inheritance', 'Fall  ', 'CS 225', 2018);
+INSERT INTO public.meetings (id, name, ci_term, ci_name, ci_year) VALUES (5, 'lab_ml', 'Fall  ', 'CS 225', 2018);
+INSERT INTO public.meetings (id, name, ci_term, ci_name, ci_year) VALUES (6, 'lab_quacks', 'Fall  ', 'CS 225', 2018);
+INSERT INTO public.meetings (id, name, ci_term, ci_name, ci_year) VALUES (7, 'lab_trees', 'Fall  ', 'CS 225', 2018);
+INSERT INTO public.meetings (id, name, ci_term, ci_name, ci_year) VALUES (8, 'lab_heaps', 'Fall  ', 'CS 225', 2018);
+INSERT INTO public.meetings (id, name, ci_term, ci_name, ci_year) VALUES (9, 'lab_avl', 'Fall  ', 'CS 225', 2018);
+INSERT INTO public.meetings (id, name, ci_term, ci_name, ci_year) VALUES (10, 'lab_heap', 'Fall  ', 'CS 225', 2018);
+INSERT INTO public.meetings (id, name, ci_term, ci_name, ci_year) VALUES (11, 'lab_memory', 'Fall  ', 'CS 225', 2018);
+INSERT INTO public.meetings (id, name, ci_term, ci_name, ci_year) VALUES (12, 'lab_hash', 'Fall  ', 'CS 225', 2018);
+INSERT INTO public.meetings (id, name, ci_term, ci_name, ci_year) VALUES (13, 'lab_dict', 'Fall  ', 'CS 225', 2018);
+INSERT INTO public.meetings (id, name, ci_term, ci_name, ci_year) VALUES (14, 'lab_btree', 'Fall  ', 'CS 225', 2018);
+INSERT INTO public.meetings (id, name, ci_term, ci_name, ci_year) VALUES (15, 'Midterm Demo', 'Spring', 'CS 411 SP 19', 2019);

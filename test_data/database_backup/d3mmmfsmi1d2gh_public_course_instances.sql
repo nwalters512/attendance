@@ -1,0 +1,2 @@
+INSERT INTO public.course_instances (id, term, name, year, course_name) VALUES (3, 'Spring', 'CS 411 SP 19', 2019, 'Databases');
+INSERT INTO public.course_instances (id, term, name, year, course_name) VALUES (2, 'Fall  ', 'CS 225', 2018, 'Data Structures');

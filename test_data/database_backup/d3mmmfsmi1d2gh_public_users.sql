@@ -1,0 +1,5 @@
+INSERT INTO public.users (id, email, password, name, netid) VALUES (1, 'rahulr2@illinois.edu', '13b1918ffc0b4991910ef0929a935874b20bd349e9de3d2044b0d1c93ae439a3', 'Rahul Rameshbabu', 'rahulr2');
+INSERT INTO public.users (id, email, password, name, netid) VALUES (2, 'parisfe2@illinois.edu', '30c952fab122c3f9759f02a6d95c3758b246b4fee239957b2d4fee46e26170c4', 'Jordi Paris Ferrer', 'parisfe2');
+INSERT INTO public.users (id, email, password, name, netid) VALUES (3, 's1', '30c952fab122c3f9759f02a6d95c3758b246b4fee239957b2d4fee46e26170c4', 'S1', 'n_s1');
+INSERT INTO public.users (id, email, password, name, netid) VALUES (4, 's2', '30c952fab122c3f9759f02a6d95c3758b246b4fee239957b2d4fee46e26170c4', 'S2', 'n_s2');
+INSERT INTO public.users (id, email, password, name, netid) VALUES (5, 's3', '30c952fab122c3f9759f02a6d95c3758b246b4fee239957b2d4fee46e26170c4', 'S3', 'n_s3');
