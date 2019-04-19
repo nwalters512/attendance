@@ -11,14 +11,14 @@
       <h2>Course Analytics</h2>
       <div class="container" style="padding-bottom: 25px">
         <div class="row" style="padding-bottom: 25px">
-          <svg width="550" height="500" id="barSvg"></svg>
+          <svg width="1110" height="600" id="barSvg"></svg>
             <!-- <div id="svg"></div>  TODO: TRY CHANGING TYPE svg -> div to fix spacing issue-->
           <div id="pieChart"></div>
         </div>
-         <div class="row" style="justify-content: center">
+         <!-- <div class="row" style="justify-content: center"> -->
           <!-- Create a div and select for our line graph and section_meeting dropdown -->
-           <select style="height:100%" id="lineSelectSecMeetButton"></select> 
-           <div id="lineSvg"></div> 
+           <!-- <select style="height:100%" id="lineSelectSecMeetButton"></select> --> 
+           <!-- <div id="lineSvg"></div> -->
         </div>
       </div>
 
@@ -155,7 +155,12 @@ g.append("g")
   .attr("class", "axis axis-x")
   .attr("font-weight", "bold")
   .attr("transform", `translate(0,${height - 25})`)
-  .call(d3.axisBottom(x));
+  .call(d3.axisBottom(x))
+  .selectAll("text")
+    .style("text-anchor", "start")
+    .attr("dx", ".5em")
+    .attr("dy", ".25em")
+    .attr("transform", "rotate(30)");
 
 g.append("g")
   .attr("class", "axis axis-y")
@@ -174,7 +179,7 @@ g.append('text')
 g.append('text')
       .attr('class', 'label')
       .attr('x', width / 2)
-      .attr('y', height + (margin.bottom)/1.7)
+      .attr('y', height + (margin.bottom)/1.1)
       .attr('text-anchor', 'middle')
       .text('Majors');
 
