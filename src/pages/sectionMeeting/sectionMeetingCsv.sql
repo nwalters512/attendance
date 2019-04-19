@@ -12,4 +12,5 @@ ON (swipes.meeting_name = section_meetings.m_name
    AND swipes.stu_ci_term = section_meetings.ci_term
    AND swipes.stu_ci_name = section_meetings.ci_name
    AND swipes.stu_ci_year = section_meetings.ci_year)
-WHERE (section_meetings.id = $sectionMeetingId);
+WHERE (section_meetings.id = $sectionMeetingId)
+ORDER BY section_meetings.m_name ASC;
