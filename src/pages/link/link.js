@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const { sqlLoader } = require('@prairielearn/prairielib')
+const { UNIQUE_VIOLATION } = require('pg-error-constants')
 const asyncErrorHandler = require('../../asyncErrorHandler')
 const dbDriver = require('../../dbDriver')
 const checks = require('../../auth/checks')
@@ -51,11 +52,22 @@ router.post(
     }
 
     await dbDriver.asyncQuery(sql.unlink_students, params)
-    const results = await dbDriver.asyncQuery(sql.link_students, params)
 
-    req.flash('info', `Linked with ${  results.rowCount  } courses`)
+    let results
+    try {
+      results = await dbDriver.asyncQuery(sql.link_students, params)
+    } catch (e) {
+      if (e.code && e.code === UNIQUE_VIOLATION) {
+        req.flash('error', `Someone else has linked with UIN ${uin}`)
+      } else {
+        req.flash('error', `Cannot link against UIN ${uin}: ${e}`)
+      }
+      res.redirect(req.originalUrl)
+      return
+    }
+
+    req.flash('info', `Linked with ${results.rowCount} courses`)
     res.redirect(req.originalUrl)
-    
   })
 )
 
