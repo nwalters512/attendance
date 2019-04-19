@@ -20,4 +20,4 @@ INSERT INTO student_is_user
     (UIN, stu_ci_term, stu_ci_name, stu_ci_year,email) 
 SELECT UIN, ci_term, ci_name, ci_year, $email
 FROM students
-WHERE UIN = $uin
+WHERE UIN = $uin;
