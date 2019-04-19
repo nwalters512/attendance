@@ -32,32 +32,23 @@ router.get(
     )).rows
     res.locals.students = students
 
-    const numCS = (await dbDriver.asyncQuery(sql.select_count_students_in_cs, {
-      ci_term: courseInstance.term,
-      ci_name: courseInstance.name,
-      ci_year: courseInstance.year,
-    })).rows[0].num_cs_in_ci
-
-    const numNonCS = (await dbDriver.asyncQuery(
-      sql.select_count_students_not_in_cs,
+    const numPerMajor = (await dbDriver.asyncQuery(
+      sql.select_count_students_by_major,
       {
         ci_term: courseInstance.term,
         ci_name: courseInstance.name,
         ci_year: courseInstance.year,
       }
-    )).rows[0].num_not_cs_in_ci
-    const pieContent = [
-      {
-        label: 'CS',
-        value: numCS,
+    )).rows
+
+    const pieContent = []
+    numPerMajor.forEach(element => {
+      pieContent.push({
+        label: element.major,
+        value: element.enrollment,
         color: colorPallete[Math.floor(Math.random() * colorPallete.length)],
-      },
-      {
-        label: 'Non-CS',
-        value: numNonCS,
-        color: colorPallete[Math.floor(Math.random() * colorPallete.length)],
-      },
-    ]
+      })
+    })
     res.locals.pieContent = pieContent
 
     const barContent = (await dbDriver.asyncQuery(
