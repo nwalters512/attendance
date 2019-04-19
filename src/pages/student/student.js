@@ -13,6 +13,17 @@ router.get(
       res.redirect('/login') // TODO: redirect back after login
       return
     }
+
+    if (
+      !(await checks.staffHasPermissionsForCourseInstance(
+        req,
+        req.params.courseInstanceId
+      ))
+    ) {
+      res.sendStatus(403)
+      return
+    }
+
     const result = await dbDriver.asyncQuery(sql.select_students, {
       ciId: req.params.courseInstanceId,
     })
@@ -25,6 +36,15 @@ router.post(
   '/',
   asyncErrorHandler(async (req, res, _next) => {
     if (!(await checks.isLoggedIn(req))) {
+      res.sendStatus(403)
+      return
+    }
+    if (
+      !(await checks.staffHasPermissionsForCourseInstance(
+        req,
+        req.params.courseInstanceId
+      ))
+    ) {
       res.sendStatus(403)
       return
     }
