@@ -15,10 +15,10 @@
             <!-- <div id="svg"></div>  TODO: TRY CHANGING TYPE svg -> div to fix spacing issue-->
           <div id="pieChart"></div>
         </div>
-         <div class="row" style="justify-content: center">
+         <!-- <div class="row" style="justify-content: center"> -->
           <!-- Create a div and select for our line graph and section_meeting dropdown -->
-           <!--<select style="height:100%" id="lineSelectSecMeetButton"></select> -->
-           <!--<div id="lineSvg"></div> -->
+           <!-- <select style="height:100%" id="lineSelectSecMeetButton"></select> --> 
+           <!-- <div id="lineSvg"></div> -->
         </div>
       </div>
 
@@ -66,15 +66,14 @@
       "location": "bottom-left"
     },
     "size": {
-      "canvasWidth": 950,
-      "canvasHeight": 800,
-      "pieOuterRadius": "92%"
+      "canvasWidth": 850,
+      "pieOuterRadius": "96%"
     },
     "data": {
       "sortOrder": "value-desc",
       "smallSegmentGrouping": {
 			"enabled": true,
-			"value": 0
+			"value": 2
 		},
       "content": [
         <% pieContent.forEach(function(obj) { %>

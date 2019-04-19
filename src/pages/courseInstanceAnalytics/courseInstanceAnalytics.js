@@ -15,16 +15,6 @@ router.get(
       return
     }
 
-    if (
-      !(await checks.staffHasPermissionsForCourseInstance(
-        req,
-        req.params.courseInstanceId
-      ))
-    ) {
-      res.sendStatus(403)
-      return
-    }
-
     const { courseInstanceId } = req.params
     const courseInstance = (await dbDriver.asyncQuery(
       sql.select_course_instance,

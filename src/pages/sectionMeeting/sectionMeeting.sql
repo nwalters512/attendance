@@ -13,7 +13,8 @@ ON (swipes.meeting_name = section_meetings.m_name
    AND swipes.stu_ci_term = section_meetings.ci_term
    AND swipes.stu_ci_name = section_meetings.ci_name
    AND swipes.stu_ci_year = section_meetings.ci_year)
-WHERE (section_meetings.id = $sectionMeetingId);
+WHERE (section_meetings.id = $sectionMeetingId)
+ORDER BY swipes.swipe_timestamp DESC;
 
 
 -- BLOCK insert_students
@@ -23,17 +24,6 @@ VALUES
     ($UIN, $ciTerm, $ciName, $ciYear)
 ON CONFLICT
 DO NOTHING;
-
-/*
-SELECT $UIN, $ciTerm, $ciName, $ciYear
-       WHERE NOT EXISTS (
-            SELECT * FROM students
-            WHERE UIN = $UIN
-            AND ci_term = $ciTerm
-            AND ci_name = $ciName
-            AND ci_year = $ciYear
-       );
-*/
 
 -- BLOCK insert_swipes
 INSERT INTO swipes

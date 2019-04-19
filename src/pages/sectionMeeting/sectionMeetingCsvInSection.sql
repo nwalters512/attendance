@@ -18,4 +18,5 @@ ON (student_is_in_section.UIN = swipes.UIN
    AND student_is_in_section.stu_ci_term = section_meetings.ci_term
    AND student_is_in_section.stu_ci_name = section_meetings.ci_name
    AND student_is_in_section.stu_ci_year = section_meetings.ci_year)
-WHERE (section_meetings.id = $sectionMeetingId);
+WHERE (section_meetings.id = $sectionMeetingId)
+ORDER BY section_meetings.m_name ASC;
