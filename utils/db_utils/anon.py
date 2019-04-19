@@ -70,6 +70,7 @@ def main():
     roster_lines = random_read(roster_filename)
     roster_reader = csv.DictReader(roster_lines)
     anon_roster = []
+    lineNum = 0
     for roster_line in roster_reader:
         roster_line["Net ID"] = anon_netid(roster_line["Net ID"])
         roster_line["UIN"] = anon_uin(roster_line["UIN"])
@@ -78,7 +79,10 @@ def main():
         roster_line["First Name"] = anon_fname(roster_line["First Name"])
         roster_line["Preferred Name"] = anon_pname(roster_line["Preferred Name"])
         anon_roster.append(roster_line)
+        lineNum += 1
 
+    print(lineNum, "lines read")
+    lineNum = 0
     new_roster_filename = roster_filename.replace(".csv", "_anon.csv")
     assert ("_anon.csv" in  new_roster_filename)
     with open(new_roster_filename, "w", newline="") as f:
@@ -86,6 +90,9 @@ def main():
         writer.writeheader()
         for row in anon_roster:
             writer.writerow(row)
+            lineNum += 1
+
+    print(lineNum, "lines written")
 
     ### Parse Sections ###
     section_filenames = filter(lambda f: not f.startswith("_"), os.listdir(sections_folder))

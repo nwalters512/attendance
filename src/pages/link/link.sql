@@ -1,5 +1,5 @@
 -- BLOCK get_linked_students_with_info
-SELECT * 
+SELECT CI.id AS stu_ci_id, S.id AS sid, * 
 FROM
     student_is_user U 
     INNER JOIN 
@@ -8,8 +8,10 @@ FROM
         U.stu_ci_year = CI.year)
     INNER JOIN courses C
         ON (CI.course_name = C.name)
-
-WHERE email = $email;
+    INNER JOIN students S ON
+        (U.uin = S.uin AND U.stu_ci_term = S.ci_term AND U.stu_ci_name = S.ci_name AND 
+        U.stu_ci_year = S.ci_year)
+WHERE U.email = $email;
 
 -- BLOCK unlink_students
 DELETE FROM student_is_user

@@ -4,8 +4,9 @@
       <ul class="navbar-nav">
           <% if (_user) { %>
           <li class="nav-item active">
-              <a class="nav-link" href="/link">Link Classes</a>
+              <a class="nav-link" href="/link">My Classes</a>
           </li>
+
           <% } else {%>
           <li class="nav-item active">
               <a class="nav-link" href="/register"> Register </a>
@@ -17,7 +18,10 @@
       </ul>
 
       <% if (_user) {%>
-      <a style="color:white" href="/logout"> <%= _user.email %> </a>
+      <div style="margin-left:6em">
+          <span style="color:white"><%= _user.email %></span>
+      </div>
+      <a class="btn btn-primary" style="margin-left:1em" href="/logout"> Logout </a>
       <%} %>
 </nav>
 
