@@ -78,6 +78,10 @@ function createApp() {
     '/sectionMeeting/:sectionMeetingId/csv',
     require('./pages/sectionMeeting/sectionMeetingCsv')
   )
+  app.use(
+    '/sectionMeeting/:sectionMeetingId/csvInSection',
+    require('./pages/sectionMeeting/sectionMeetingCsvInSection')
+  )
 
   return app
 }
