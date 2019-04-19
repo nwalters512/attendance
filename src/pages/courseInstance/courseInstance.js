@@ -117,11 +117,13 @@ router.post(
         ciYear: Number.parseInt(req.body.courseInstanceYear, 10),
       }
       if (Number.isNaN(params.CRN)) {
-        ERR(new Error(`Invalid CRN: ${req.body.CRN}`), next)
+        req.flash('error', `Invalid CRN: ${req.body.CRN}`)
+        res.redirect(req.originalUrl)
         return
       }
       if (Number.isNaN(params.ciYear)) {
-        ERR(new Error(`Invalid year: ${req.body.courseInstanceYear}`), next)
+        req.flash('error', `Invalid year: ${req.body.courseInstanceYear}`)
+        res.redirect(req.originalUrl)
         return
       }
       await dbDriver.asyncQuery(sql.insert_sections, params)
@@ -134,7 +136,8 @@ router.post(
         ciYear: Number.parseInt(req.body.courseInstanceYear, 10),
       }
       if (Number.isNaN(params.ciYear)) {
-        ERR(new Error(`Invalid year: ${req.body.courseInstanceYear}`), next)
+        req.flash('error', `Invalid year: ${req.body.courseInstanceYear}`)
+        res.redirect(req.originalUrl)
         return
       }
       await dbDriver.asyncQuery(sql.insert_meetings, params)
@@ -147,7 +150,7 @@ router.post(
       }
       const { rosterFile } = req.files
       if (rosterFile === null || rosterFile === undefined) {
-        ERR("Failed to receive 'rosterFile' in POST request!", next)
+        ERR(new Error("Failed to receive 'rosterFile' in POST request!"), next)
         return
       }
       if (rosterFile.data === null || rosterFile.data === undefined) {

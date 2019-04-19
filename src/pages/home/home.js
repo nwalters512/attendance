@@ -1,4 +1,3 @@
-const ERR = require('async-stacktrace')
 const router = require('express').Router()
 const { UNIQUE_VIOLATION } = require('pg-error-constants')
 const { sqlLoader } = require('@prairielearn/prairielib')
@@ -23,7 +22,7 @@ router.get(
 
 router.post(
   '/',
-  asyncErrorHandler(async (req, res, next) => {
+  asyncErrorHandler(async (req, res, _next) => {
     if (!(await checks.isLoggedIn(req))) {
       res.sendStatus(403)
       return
@@ -36,7 +35,8 @@ router.post(
       }
 
       if (Number.isNaN(params.number)) {
-        ERR(new Error(`Invalid course number: ${req.body.number}`), next)
+        req.flash('error', `Invalid course number: ${req.body.number}`)
+        res.redirect(req.originalUrl)
         return
       }
 

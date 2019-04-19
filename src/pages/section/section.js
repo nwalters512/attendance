@@ -61,7 +61,10 @@ router.post(
       }
       const { enrollmentFile } = req.files
       if (enrollmentFile === null || enrollmentFile === undefined) {
-        ERR("Failed to receive 'enrollmentFile' in POST request!", next)
+        ERR(
+          new Error("Failed to receive 'enrollmentFile' in POST request!"),
+          next
+        )
         return
       }
       if (enrollmentFile.data === null || enrollmentFile.data === undefined) {
