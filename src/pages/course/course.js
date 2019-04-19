@@ -114,9 +114,15 @@ router.post(
 
       if (result.rowCount === 0) {
         req.flash('error', `No user with email ${req.body.email.trim()}`)
-      } else {
-        req.flash('info', `Added user ${req.body.email.trim()} as an owner`)
+        res.redirect(req.originalUrl)
+        return
       }
+      req.flash('info', `Added user ${req.body.email.trim()} as an owner`)
+
+      await dbDriver.asyncQuery(
+        sql.retroactive_give_owner_instance_access,
+        params
+      )
     } else if (req.body.__action === 'removeOwner') {
       if (!(await checks.staffIsOwnerOfCourse(req, req.params.courseId))) {
         req.flash('error', 'Must be owner to remove owners!')

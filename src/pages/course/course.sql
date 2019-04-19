@@ -27,6 +27,15 @@ FROM is_owner
 WHERE is_owner.name = $course_name
 ON CONFLICT DO NOTHING;
 
+-- BLOCK retroactive_give_owner_instance_access
+INSERT INTO user_assists_course_instance
+  (email, ci_term, ci_name, ci_year)
+SELECT $email, CI.term, CI.name, CI.year
+FROM course_instances CI INNER JOIN courses C
+ON (CI.course_name = C.name)
+WHERE C.id = $courseId
+ON CONFLICT DO NOTHING;
+
 -- BLOCK select_owners
 SELECT *, is_owner.name AS course_name FROM is_owner INNER JOIN users ON
     (is_owner.email = users.email)
