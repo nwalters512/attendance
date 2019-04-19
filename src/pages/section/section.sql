@@ -15,3 +15,26 @@ sections.ci_term = section_meetings.ci_term AND
 sections.ci_name = section_meetings.ci_name AND
 sections.ci_year = section_meetings.ci_year)
 WHERE (sections.id = $sectionId);
+
+-- BLOCK delete_section_enrollment
+DELETE FROM student_is_in_section
+WHERE sec_name = $secName
+AND stu_ci_term = $ciTerm
+AND stu_ci_name = $ciName
+AND stu_ci_year = $ciYear;
+
+-- BLOCK insert_student_is_in_section
+INSERT INTO student_is_in_section (
+UIN,
+stu_ci_term,
+stu_ci_name,
+stu_ci_year,
+sec_name
+)
+SELECT * FROM UNNEST (
+$UIN::bigint[],
+$ciTerm::text[],
+$ciName::text[],
+$ciYear::smallint[],
+$secName::text[]
+)
