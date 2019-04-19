@@ -1,15 +1,15 @@
 name,ci_term,ci_name,ci_year
-lab_heap,Fall,CS 225,2018
-lab_memory,Fall,CS 225,2018
-lab_heaps,Fall,CS 225,2018
-lab_hash,Fall,CS 225,2018
 lab_flow,Fall,CS 225,2018
-lab_trees,Fall,CS 225,2018
+lab_hash,Fall,CS 225,2018
 lab_inheritance,Fall,CS 225,2018
+lab_trees,Fall,CS 225,2018
+lab_heaps,Fall,CS 225,2018
 lab_quacks,Fall,CS 225,2018
 lab_dict,Fall,CS 225,2018
-lab_inheriance,Fall,CS 225,2018
 lab_btree,Fall,CS 225,2018
-lab_huffman,Fall,CS 225,2018
-lab_ml,Fall,CS 225,2018
+lab_heap,Fall,CS 225,2018
 lab_avl,Fall,CS 225,2018
+lab_ml,Fall,CS 225,2018
+lab_huffman,Fall,CS 225,2018
+lab_memory,Fall,CS 225,2018
+lab_inheriance,Fall,CS 225,2018
