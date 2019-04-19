@@ -19,6 +19,18 @@ router.get(
       return
     }
 
+    // The following should never throw an error if properly following ER diagram
+    const ciIdData = await dbDriver.asyncQuery(
+      sql.select_course_instance_id_from_section_meeting_id,
+      { sectionMeetingId: req.params.sectionMeetingId }
+    )
+    const ciId = ciIdData.rows[0].ci_id
+
+    if (!(await checks.staffHasPermissionsForCourseInstance(req, ciId))) {
+      res.sendStatus(403)
+      return
+    }
+
     const result = await dbDriver.asyncQuery(
       sql.select_swipes_join_section_meetings,
       { sectionMeetingId: req.params.sectionMeetingId }
