@@ -24,6 +24,7 @@ const rosterCsvHeadingMap = {
   'Preferred Name': 'preferredName',
   'Email Address': 'emailAddress',
   'Major 1 Name': 'majorName',
+  Credit: 'credits',
 }
 
 router.use(
