@@ -13,7 +13,8 @@ ON (swipes.meeting_name = section_meetings.m_name
    AND swipes.stu_ci_name = section_meetings.ci_name
    AND swipes.stu_ci_year = section_meetings.ci_year)
 INNER JOIN student_is_in_section
-ON (student_is_in_section.sec_name = section_meetings.s_name
+ON (student_is_in_section.UIN = swipes.UIN
+   AND student_is_in_section.sec_name = section_meetings.s_name
    AND student_is_in_section.stu_ci_term = section_meetings.ci_term
    AND student_is_in_section.stu_ci_name = section_meetings.ci_name
    AND student_is_in_section.stu_ci_year = section_meetings.ci_year)
