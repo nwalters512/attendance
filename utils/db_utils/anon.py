@@ -90,8 +90,8 @@ def main():
     ### Parse Sections ###
     section_filenames = filter(lambda f: not f.startswith("_"), os.listdir(sections_folder))
     section_filenames = map(lambda f: path.join(sections_folder,f), section_filenames)
-    ci_term = "Spring"
-    ci_year = 2019
+    ci_term = "Fall"
+    ci_year = 2018
     ci_name = "CS 225"
     section_names = set()
     meeting_names = set()
@@ -102,7 +102,11 @@ def main():
         reader = csv.DictReader(sm_lines)
 
         for row in reader:
-            section, meeting = row["section_name"].split(" ")
+            try:
+                section, meeting = row["section_name"].strip().split(" ")
+            except:
+                print(row["section_name"])
+                raise
             section_names.add(section)
             meeting_names.add(meeting)
 
