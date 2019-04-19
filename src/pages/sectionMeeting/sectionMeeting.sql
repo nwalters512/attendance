@@ -37,9 +37,9 @@ SELECT $UIN, $ciTerm, $ciName, $ciYear
 
 -- BLOCK insert_swipes
 INSERT INTO swipes
-    (UIN, stu_ci_term, stu_ci_name, stu_ci_year, meeting_name, sec_name)
+    (UIN, stu_ci_term, stu_ci_name, stu_ci_year, meeting_name, sec_name, swipe_timestamp)
 VALUES
-    ($UIN, $ciTerm, $ciName, $ciYear, $mname, $sname);
+    ($UIN, $ciTerm, $ciName, $ciYear, $mname, $sname, CURRENT_TIMESTAMP);
 
 -- BLOCK delete_swipes
 DELETE FROM swipes WHERE id = $id;
