@@ -186,7 +186,7 @@ router.post(
       })
       if (params.ciName.length === 0) {
         req.flash(
-          'warn',
+          'error',
           'Roster file uploaded does not seem to have any entries'
         )
         req.redirect(req.originalUrl)
@@ -201,6 +201,7 @@ router.post(
         delete params[heading]
       })
       await dbDriver.asyncQuery(sql.insert_update_roster, params)
+      req.flash('info', 'Successfully uploaded student roster data')
     } else if (req.body.__action === 'addStaff') {
       if (
         !(await checks.staffHasPermissionsForCourseInstance(

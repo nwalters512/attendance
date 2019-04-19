@@ -102,7 +102,7 @@ router.post(
       })
       if (params.ciName.length === 0) {
         req.flash(
-          'warn',
+          'error',
           'Enrollment file uploaded does not seem to have any entries'
         )
         req.redirect(req.originalUrl)
@@ -116,6 +116,7 @@ router.post(
       }
       await dbDriver.asyncQuery(sql.delete_section_enrollment, sectionParams)
       await dbDriver.asyncQuery(sql.insert_student_is_in_section, params)
+      req.flash('info', 'Successfully uploaded section enrollment data')
     }
 
     res.redirect(req.originalUrl)
