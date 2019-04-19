@@ -52,7 +52,7 @@ router.get(
 
 router.post(
   '/',
-  asyncErrorHandler(async (req, res, next) => {
+  asyncErrorHandler(async (req, res, _next) => {
     if (!(await checks.isLoggedIn(req))) {
       res.sendStatus(403)
       return
@@ -77,7 +77,8 @@ router.post(
           const stuRow = results.rows[0]
           uin = stuRow
         } else {
-          ERR(new Error(`Invalid netid: ${req.body.UIN}`), next)
+          req.flash('error', `Invalid netid: ${req.body.UIN}`)
+          res.redirect(req.originalUrl)
           return
         }
       } else {
@@ -85,7 +86,8 @@ router.post(
         uin = extractUIN(req.body.UIN)
       }
       if (uin === null) {
-        ERR(new Error(`Invalid UIN: ${req.body.UIN}`), next)
+        req.flash('error', `Invalid UIN: ${req.body.UIN}`)
+        res.redirect(req.originalUrl)
         return
       }
       uin = Number.parseInt(uin, 10)
@@ -99,11 +101,13 @@ router.post(
         sname: req.body.sectionName,
       }
       if (Number.isNaN(params.UIN)) {
-        ERR(new Error(`Invalid UIN: ${req.body.UIN}`), next)
+        req.flash('error', `Invalid UIN: ${req.body.UIN}`)
+        res.redirect(req.originalUrl)
         return
       }
       if (Number.isNaN(params.ciYear)) {
-        ERR(new Error(`Invalid year: ${req.body.ciYear}`), next)
+        req.flash('error', `Invalid year: ${req.body.ciYear}`)
+        res.redirect(req.originalUrl)
         return
       }
       await dbDriver.asyncQuery(sql.insert_students, params)
@@ -113,7 +117,7 @@ router.post(
       } catch (e) {
         if (e.code && e.code === UNIQUE_VIOLATION) {
           // TODO: some nice UI which says it's a duplicate swipe
-          ERR(new Error('Duplicate swipe!'))
+          req.flash('error', 'Duplicate swipe!')
         }
       }
     }
