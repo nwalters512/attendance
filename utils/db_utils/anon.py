@@ -143,10 +143,10 @@ def main():
     with open(path.join(sections_folder, "_sectionMeetings.csv"), "w") as f:
         writer = csv.DictWriter(f, fieldnames=("m_name", "s_name","ci_term","ci_name","ci_year"))
         writer.writeheader()
-        for m_name, s_name in zip(meeting_names, section_names):
-
-            writer.writerow({"s_name": s_name, "m_name": m_name, "ci_term": ci_term, 
-                "ci_name": ci_name, "ci_year": ci_year})
+        for m_name in meeting_names:
+            for s_name in section_names:
+                writer.writerow({"s_name": s_name, "m_name": m_name, "ci_term": ci_term, 
+                    "ci_name": ci_name, "ci_year": ci_year})
 
 
 if __name__ == "__main__":
