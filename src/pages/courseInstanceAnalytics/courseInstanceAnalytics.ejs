@@ -15,10 +15,10 @@
             <!-- <div id="svg"></div>  TODO: TRY CHANGING TYPE svg -> div to fix spacing issue-->
           <div id="pieChart"></div>
         </div>
-        <!-- <div class="row" style="justify-content: center"> -->
+         <div class="row" style="justify-content: center"> 
           <!-- Create a div and select for our line graph and section_meeting dropdown -->
-          <!-- <select style="height:100%" id="lineSelectSecMeetButton"></select> -->
-          <!-- <div id="lineSvg"></div> -->
+           <select style="height:100%" id="lineSelectSecMeetButton"></select> 
+           <div id="lineSvg"></div> 
         </div>
       </div>
 
@@ -66,7 +66,7 @@
       "location": "bottom-left"
     },
     "size": {
-      "canvasWidth": 550,
+      "canvasWidth": 850,
       "pieOuterRadius": "96%"
     },
     "data": {
@@ -192,7 +192,8 @@ g.selectAll(".bar")
 
 
 <!-- SCRIPT for generating and populating our line graph -->
-<!-- <script>
+<!--
+    <script>
 // set the dimensions and margins of the graph
 var margin = {top: 10, right: 30, bottom: 30, left: 60},
     width = 460 - margin.left - margin.right,
@@ -213,6 +214,7 @@ var data = [
          {
            "sectionmeeting": "<%= obj.sectionmeeting %>",
            "swipe": "<%= obj.studentswipe %>",
+           "swipeTime": "<%= obj.studentswipe.getTime() %>",
            "swipeHour": <%= obj.studentswipe.getHours() %>,
            "swipeMinute": <%= obj.studentswipe.getMinutes() %>,
            "swipeSecond": <%= obj.studentswipe.getSeconds() %>,
@@ -234,14 +236,20 @@ d3.select("#lineSelectSecMeetButton")
 var curColor = d3.scaleOrdinal()
   .domain(allSecMeets)
   .range(d3.schemeSet2);
+
+var maxTS = data.filter(function(d){return d.sectionmeeting == allSecMeets[0]}).reduce((a, b) => {
+return Math.max(a, b.swipeTime)}, 0);
+var minTS = data.filter(function(d){return d.sectionmeeting == allSecMeets[0]}).reduce((a, b) => {
+return Math.min(a, b.swipeTime)}, 999999999999999);
+
 // Add X axis it is a date format
 var x = d3.scaleLinear()
-  .domain(d3.extent(data, function(d) { return d.swipe; }))
+  .domain([minTS, maxTS])
 //      .domain(d3.extent(data, function(d) { return d.year; })) // TODO: SHOULD INSTEAD grab d.date/ d.time
   .range([ 0, width ]);
 svg.append("g")
   .attr("transform", `translate(0,${height})`)
-  .call(d3.axisBottom(x).ticks(8));
+  .call(d3.axisBottom(x).ticks(2));
 
 var maxBucketSize = d3.max(data, function(d) { return 4; });
 // Add Y axis
@@ -259,7 +267,7 @@ var line = svg
     .datum(data.filter(function(d){return d.sectionmeeting == allSecMeets[0]}))
 //        .datum(data.filter(function(d){return d.section_meeting_name==allSecMeets[0]}))
     .attr("d", d3.line()
-      .x(function(d) { return x(d.swipe) })
+      .x(function(d) { return x(d.swipeTime) })
       .y(function(d) { return y(1) })
 //          .x(function(d) { return x(d.year) }) // TODO: INSTEAD grab d.date/ d.time
 //          .y(function(d) { return y(+d.n) }) // TODO: INSTEAD grab num_swipes_in_time_frame
@@ -274,12 +282,14 @@ function update(selectedSectionMeeting) {
   // Create new data with the selection?
   var dataFilter = data.filter(function(d){return d.sectionmeeting == selectedSectionMeeting})
 
+  // TODO(jordi): recompute minTs, maxTs, x, y and somehow integrate
+
   // Give these new data to update line
   line.datum(dataFilter)
       .transition()
       .duration(1000)
       .attr("d", d3.line()
-        .x(function(d) { return x(d.swipe) })
+        .x(function(d) { return x(d.swipeTime) })
         .y(function(d) { return y(bucketSize) })
 //          .x(function(d) { return x(d.year) }) // TODO: INSTEAD grab d.date/ d.time
 //          .y(function(d) { return y(+d.n) }) // TODO: INSTEAD grab num_swipes_in_time_frame
@@ -293,7 +303,8 @@ d3.select("#lineSelectSecMeetButton").on("change", function(d) {
     var selectedOption = d3.select(this).property("value")
     update(selectedOption)
 })
-</script> -->
+</script>
+-->
 
 
 </html>
