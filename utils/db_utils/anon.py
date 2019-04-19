@@ -1,6 +1,9 @@
+import os
+import os.path as path
 import sys
 import csv
 import random
+from collections import OrderedDict
 
 uin_map = {}
 netid_map = {}
@@ -63,7 +66,7 @@ def main():
     roster_filename = sys.argv[1]
     sections_folder = sys.argv[2]
 
-    # Parse roster
+    ### Parse Roster ###
     roster_lines = random_read(roster_filename)
     roster_reader = csv.DictReader(roster_lines)
     anon_roster = []
@@ -78,11 +81,69 @@ def main():
 
     new_roster_filename = roster_filename.replace(".csv", "_anon.csv")
     assert ("_anon.csv" in  new_roster_filename)
-    with open(new_roster_filename, "w") as f:
+    with open(new_roster_filename, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=list(anon_roster[0].keys()),extrasaction="ignore")
         writer.writeheader()
-        for row in anon_roster[1:]:
+        for row in anon_roster:
             writer.writerow(row)
+
+    ### Parse Sections ###
+    section_filenames = filter(lambda f: not f.startswith("_"), os.listdir(sections_folder))
+    section_filenames = map(lambda f: path.join(sections_folder,f), section_filenames)
+    ci_term = "Spring"
+    ci_year = 2019
+    ci_name = "CS 225"
+    section_names = set()
+    meeting_names = set()
+    swipes = []
+
+    for sm_filename in section_filenames:
+        sm_lines = random_read(sm_filename)
+        reader = csv.DictReader(sm_lines)
+
+        for row in reader:
+            section, meeting = row["section_name"].split(" ")
+            section_names.add(section)
+            meeting_names.add(meeting)
+
+            d = OrderedDict()
+            d["UIN"] = anon_uin(row["uin"])
+            d["stu_ci_term"] = ci_term
+            d["stu_ci_year"] = ci_year
+            d["stu_ci_name"] = ci_name
+            d["meeting_name"] = meeting
+            d["sec_name"] = section
+            d["swipe_timestamp"] = row["timestamp"]
+
+            swipes.append(d)
+
+    with open(path.join(sections_folder, "_swipes.csv"), "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=list(swipes[0].keys()),extrasaction="ignore")
+        writer.writeheader()
+        for row in swipes:
+            writer.writerow(row)
+
+    
+    with open(path.join(sections_folder, "_sections.csv"), "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=("name","ci_term","ci_name","ci_year"))
+        writer.writeheader()
+        for s_name in section_names:
+            writer.writerow({"name": s_name, "ci_term": ci_term, "ci_name": ci_name,
+                "ci_year": ci_year})
+    with open(path.join(sections_folder, "_meetings.csv"), "w") as f:
+        writer = csv.DictWriter(f, fieldnames=("name","ci_term","ci_name","ci_year"))
+        writer.writeheader()
+        for m_name in meeting_names:
+            writer.writerow({"name": m_name, "ci_term": ci_term, "ci_name": ci_name,
+                "ci_year": ci_year})
+    with open(path.join(sections_folder, "_sectionMeetings.csv"), "w") as f:
+        writer = csv.DictWriter(f, fieldnames=("m_name", "s_name","ci_term","ci_name","ci_year"))
+        writer.writeheader()
+        for m_name, s_name in zip(meeting_names, section_names):
+
+            writer.writerow({"s_name": s_name, "m_name": m_name, "ci_term": ci_term, 
+                "ci_name": ci_name, "ci_year": ci_year})
+
 
 if __name__ == "__main__":
     main()
