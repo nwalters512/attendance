@@ -50,3 +50,28 @@ SELECT (CASE WHEN major IS NULL THEN 'UNKNOWN' ELSE major END) AS major, ( COUNT
       AND section_meetings.ci_name = $ci_name
       AND section_meetings.ci_year = $ci_year)
     GROUP BY major);
+
+-- BLOCK select_swipetimes_per_section_meeting
+SELECT CONCAT(sec_name, ' ', meeting_name) AS sectionmeeting, swipe_timestamp AS studentswipe FROM swipes
+  WHERE (swipes.stu_ci_term = $ci_term
+    AND swipes.stu_ci_name = $ci_name
+    AND swipes.stu_ci_year = $ci_year);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--

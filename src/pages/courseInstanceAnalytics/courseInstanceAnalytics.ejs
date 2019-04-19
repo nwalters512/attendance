@@ -9,14 +9,16 @@
       <h1>Analytics</h1>
 
       <h2>Course Analytics</h2>
-      <div class="container">
-        <div class="row">
-          <svg width="550" height="500">
-            <div id="svg"></div>
-          </svg>
-        </div>
-        <div class="row">
+      <div class="container" style="padding-bottom: 25px">
+        <div class="row" style="padding-bottom: 25px">
+          <svg width="550" height="500" id="barSvg"></svg>
+            <!-- <div id="svg"></div>  TODO: TRY CHANGING TYPE svg -> div to fix spacing issue-->
           <div id="pieChart"></div>
+        </div>
+        <!-- <div class="row" style="justify-content: center"> -->
+          <!-- Create a div and select for our line graph and section_meeting dropdown -->
+          <!-- <select style="height:100%" id="lineSelectSecMeetButton"></select> -->
+          <!-- <div id="lineSvg"></div> -->
         </div>
       </div>
 
@@ -32,10 +34,15 @@
       </ul>
     </div>
   </body>
-  <script src="https://d3js.org/d3.v5.min.js"  charset="utf-8"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/d3/4.7.2/d3.min.js" charset="utf-8"></script>
-  <script src="/js/d3pie.min.js" charset="utf-8"></script>
-  <script src="//code.jquery.com/jquery-1.10.2.js" charset="utf-8"></script>
+
+<!-- Imported general support scripts needed for running d3.js features, coloring, or some other similarly general function -->
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js" charset="utf-8"></script>
+<script src="https://d3js.org/d3.v5.min.js" charset="utf-8"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/d3/4.7.2/d3.min.js" charset="utf-8"></script>
+<script src="/js/d3pie.min.js" charset="utf-8"></script>
+<script src="//code.jquery.com/jquery-1.10.2.js" charset="utf-8"></script>
+
+<!-- SCRIPT for generating and populating our pie chart -->
 <script>
   var pie = new d3pie("pieChart", {
     "header": {
@@ -111,8 +118,11 @@
     }
   });
 </script>
+
+
+<!-- SCRIPT for generating and populating our bar graph -->
 <script>
-  var svg     = new d3.select("svg"),
+  var svg     = new d3.select("#barSvg"),
       margin  = {top: 20, right: 20, bottom: 30, left: 50},
       width   = +svg.attr("width")  - margin.left - margin.right,
       height  = +svg.attr("height") - margin.top  - margin.bottom,
@@ -180,6 +190,110 @@ g.selectAll(".bar")
 });
 </script>
 
+
+<!-- SCRIPT for generating and populating our line graph -->
+<!-- <script>
+// set the dimensions and margins of the graph
+var margin = {top: 10, right: 30, bottom: 30, left: 60},
+    width = 460 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#lineSvg")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          `translate(${margin.left},${margin.top})`);
+
+//Read the data
+var data = [
+       <% lineContent.forEach(function(obj) { %>
+         {
+           "sectionmeeting": "<%= obj.sectionmeeting %>",
+           "swipe": "<%= obj.studentswipe %>",
+           "swipeHour": <%= obj.studentswipe.getHours() %>,
+           "swipeMinute": <%= obj.studentswipe.getMinutes() %>,
+           "swipeSecond": <%= obj.studentswipe.getSeconds() %>,
+         },
+       <% }) %>
+     ]
+var allSecMeets = d3.map(data, function(d){return(d.sectionmeeting)}).keys()
+
+// add the options to the button
+d3.select("#lineSelectSecMeetButton")
+  .selectAll('myOptions')
+ 	.data(allSecMeets)
+  .enter()
+	.append('option')
+  .text(function (d) { return d; }) // text showed in the menu
+  .attr("value", function (d) { return d; }) // corresponding value returned by the button
+
+// A color scale: one color for each group
+var curColor = d3.scaleOrdinal()
+  .domain(allSecMeets)
+  .range(d3.schemeSet2);
+// Add X axis it is a date format
+var x = d3.scaleLinear()
+  .domain(d3.extent(data, function(d) { return d.swipe; }))
+//      .domain(d3.extent(data, function(d) { return d.year; })) // TODO: SHOULD INSTEAD grab d.date/ d.time
+  .range([ 0, width ]);
+svg.append("g")
+  .attr("transform", `translate(0,${height})`)
+  .call(d3.axisBottom(x).ticks(8));
+
+var maxBucketSize = d3.max(data, function(d) { return 4; });
+// Add Y axis
+var y = d3.scaleLinear()
+  .domain([0, maxBucketSize])
+//      .domain([0, d3.max(data, function(d) { return +d.n; })]) // TODO: SHOULD instead grab d.bucket_size - num people who swiped in during this time frame
+  .range([ height, 0 ]);
+svg.append("g")
+  .call(d3.axisLeft(y));
+
+// Initialize line with first group of the list
+var line = svg
+  .append('g')
+  .append("path")
+    .datum(data.filter(function(d){return d.sectionmeeting == allSecMeets[0]}))
+//        .datum(data.filter(function(d){return d.section_meeting_name==allSecMeets[0]}))
+    .attr("d", d3.line()
+      .x(function(d) { return x(d.swipe) })
+      .y(function(d) { return y(1) })
+//          .x(function(d) { return x(d.year) }) // TODO: INSTEAD grab d.date/ d.time
+//          .y(function(d) { return y(+d.n) }) // TODO: INSTEAD grab num_swipes_in_time_frame
+    )
+    .attr("stroke", function(d){ return curColor("valueA") })
+    .style("stroke-width", 4)
+    .style("fill", "none")
+
+// A function that update the chart
+function update(selectedSectionMeeting) {
+
+  // Create new data with the selection?
+  var dataFilter = data.filter(function(d){return d.sectionmeeting == selectedSectionMeeting})
+
+  // Give these new data to update line
+  line.datum(dataFilter)
+      .transition()
+      .duration(1000)
+      .attr("d", d3.line()
+        .x(function(d) { return x(d.swipe) })
+        .y(function(d) { return y(bucketSize) })
+//          .x(function(d) { return x(d.year) }) // TODO: INSTEAD grab d.date/ d.time
+//          .y(function(d) { return y(+d.n) }) // TODO: INSTEAD grab num_swipes_in_time_frame
+      )
+      .attr("stroke", function(d){ return curColor(selectedSectionMeeting) })
+}
+
+// When the button is changed, run the updateChart function
+d3.select("#lineSelectSecMeetButton").on("change", function(d) {
+    // recover the option that has been chosen
+    var selectedOption = d3.select(this).property("value")
+    update(selectedOption)
+})
+</script> -->
 
 
 </html>

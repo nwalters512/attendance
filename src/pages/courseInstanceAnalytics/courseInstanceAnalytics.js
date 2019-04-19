@@ -61,6 +61,16 @@ router.get(
     )).rows
     res.locals.barContent = barContent
 
+    const lineContent = (await dbDriver.asyncQuery(
+      sql.select_swipetimes_per_section_meeting,
+      {
+        ci_term: courseInstance.term,
+        ci_name: courseInstance.name,
+        ci_year: courseInstance.year,
+      }
+    )).rows
+    res.locals.lineContent = lineContent
+
     res.render(__filename.replace(/\.js/, '.ejs'), res.locals)
   })
 )
