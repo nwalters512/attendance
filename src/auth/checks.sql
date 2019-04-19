@@ -13,6 +13,12 @@ SELECT * FROM
 WHERE
   O.email = $userEmail;
 
+-- BLOCK get_user_is_owner_for_course_by_name
+SELECT * FROM is_owner
+WHERE
+  email = $userEmail AND
+  name = $courseName;
+
 -- BLOCK user_is_student
 SELECT * FROM
  student_is_user
