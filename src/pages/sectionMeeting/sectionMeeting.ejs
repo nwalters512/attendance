@@ -31,7 +31,7 @@
       <h2>Swiped-in students</h2>
       <ul class="list-group">
         <% swipes.forEach(function(swipe) { %>
-        <li class="list-group-item"><%= swipe.uin %></li>
+            <li class="list-group-item"><%= swipe.uin %>    <%= swipe.swipe_timestamp.toUTCString() %></li>
         <% }) %>
       </ul>
     </div>
