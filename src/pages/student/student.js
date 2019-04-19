@@ -13,7 +13,9 @@ router.get(
       res.redirect('/login') // TODO: redirect back after login
       return
     }
-    const result = await dbDriver.asyncQuery(sql.select_students, {})
+    const result = await dbDriver.asyncQuery(sql.select_students, {
+      ciId: req.params.courseInstanceId,
+    })
     res.locals.students = result.rows
     res.render(__filename.replace(/\.js$/, '.ejs'), res.locals)
   })

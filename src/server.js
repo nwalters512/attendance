@@ -53,7 +53,10 @@ function createApp() {
     req.logout()
     res.redirect('/')
   })
-  app.use('/student', require('./pages/student/student'))
+  app.use(
+    '/courseInstance/:courseInstanceId/students',
+    require('./pages/student/student')
+  )
   app.use('/link', require('./pages/link/link'))
   app.use('/course/:courseId', require('./pages/course/course'))
   app.use(

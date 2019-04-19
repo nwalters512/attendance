@@ -15,7 +15,7 @@
                     <%= student.firstname %> <%= student.lastname %> <%= student.major %> (<%= student.uin %> <%= student.ci_name %> <%= student.ci_term %> <%= student.ci_year %>)
                     <form method="POST">
                         <input type="hidden" name="__action" value="updateStudent" />
-                        <input type="hidden" name="id" value="<%= student.id %>" />
+                        <input type="hidden" name="id" value="<%= student.sid %>" />
                         <label>FirstName: </label>
                         <input type="text" name="firstName" value="<%= student.firstname %>" />
                         <br/>
