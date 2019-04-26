@@ -13,7 +13,6 @@ router.get(
       res.redirect('/login') // TODO: redirect back after login
       return
     }
-
     const courseInstance = (await dbDriver.asyncQuery(
       sql.select_course_instance,
       { id: req.params.courseInstanceId }
@@ -24,6 +23,17 @@ router.get(
       id: req.params.studentId,
     })).rows[0]
     res.locals.student = student
+
+    if (
+      !(await checks.staffHasPermissionsForCourseInstance(
+        req,
+        req.params.courseInstanceId
+      )) &&
+      !(await checks.userIsStudent(req, student))
+    ) {
+      res.sendStatus(403)
+      return
+    }
 
     const courseInstanceParams = {
       ci_term: courseInstance.term,

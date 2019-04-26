@@ -14,6 +14,15 @@ router.get(
       res.redirect('/login') // TODO: redirect back after login
       return
     }
+    if (
+      !(await checks.staffHasPermissionsForCourseInstance(
+        req,
+        req.params.courseInstanceId
+      ))
+    ) {
+      res.sendStatus(403)
+      return
+    }
 
     const { courseInstanceId } = req.params
     const courseInstance = (await dbDriver.asyncQuery(
