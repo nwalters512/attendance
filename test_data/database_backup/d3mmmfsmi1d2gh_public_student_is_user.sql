@@ -1,0 +1,4 @@
+INSERT INTO public.student_is_user (id, uin, stu_ci_term, stu_ci_name, stu_ci_year, email) VALUES (2, 600000001, 'Fall  ', 'CS 225', 2018, 'parisfe2@illinois.edu');
+INSERT INTO public.student_is_user (id, uin, stu_ci_term, stu_ci_name, stu_ci_year, email) VALUES (3, 600000001, 'Spring', 'CS 411 SP 19', 2019, 'parisfe2@illinois.edu');
+INSERT INTO public.student_is_user (id, uin, stu_ci_term, stu_ci_name, stu_ci_year, email) VALUES (4, 600000011, 'Fall  ', 'CS 225', 2018, 's1');
+INSERT INTO public.student_is_user (id, uin, stu_ci_term, stu_ci_name, stu_ci_year, email) VALUES (6, 600000013, 'Fall  ', 'CS 225', 2018, 's2');
