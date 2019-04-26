@@ -13,6 +13,7 @@ router.get(
       res.redirect('/login') // TODO: redirect back after login
       return
     }
+
     const courseInstance = (await dbDriver.asyncQuery(
       sql.select_course_instance,
       { id: req.params.courseInstanceId }
