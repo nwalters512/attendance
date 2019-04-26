@@ -25,6 +25,17 @@ router.get(
     })).rows[0]
     res.locals.student = student
 
+    if (
+      !(await checks.staffHasPermissionsForCourseInstance(
+        req,
+        req.params.courseInstanceId
+      )) &&
+      !(await checks.userIsStudent(req, student))
+    ) {
+      res.sendStatus(403)
+      return
+    }
+
     const courseInstanceParams = {
       ci_term: courseInstance.term,
       ci_name: courseInstance.name,
