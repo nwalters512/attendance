@@ -74,8 +74,8 @@ router.post(
           params
         )
         if (results.rows.length > 0) {
-          const stuRow = results.rows[0]
-          uin = stuRow
+          const stuUIN = results.rows[0].uin
+          uin = stuUIN
         } else {
           req.flash('error', `Invalid netid: ${req.body.UIN}`)
           res.redirect(req.originalUrl)
