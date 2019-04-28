@@ -35,7 +35,8 @@
                 </li>
                     <% } else {%>
                 <li
-                    class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center"
+                    class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center"
+                    style="filter: brightness(110%)"
                     >
                     <%= student.firstname %> <%= student.lastname %> <%= student.major %> (<%= student.uin %> <%= student.ci_name %> <%= student.ci_term %> <%= student.ci_year %>)
                     <form method="POST">
