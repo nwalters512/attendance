@@ -9,13 +9,22 @@
         <h1><%= meetingName %></h1>
       <h2>Section - Meetings</h2>
       <ul class="list-group">
-          <% section_meetings.forEach(function(sec_meeting) { %>
+          <% section_meetings.forEach(function(sec_meeting, idx) { %>
+              <% if (idx % 2) {%>
               <a
                   href="/sectionMeeting/<%= sec_meeting.id %>"
-                  class="list-group-item d-flex justify-content-between align-items-center"
+                  class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center"
               >
                   <%= sec_meeting.s_name %> - <%= sec_meeting.m_name %>
               </a>
+              <% } else {%>
+              <a
+                  href="/sectionMeeting/<%= sec_meeting.id %>"
+                  class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center"
+              >
+                  <%= sec_meeting.s_name %> - <%= sec_meeting.m_name %>
+              </a>
+              <% } %>
           <% }) %>
       </ul>
     </div>

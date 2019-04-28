@@ -28,12 +28,16 @@
           <button type="submit" class="btn btn-primary">Create swipe</button>
         </form>
       </div>
-      <a class="btn btn-primary" href="/sectionMeeting/<%= sectionMeetingId %>/csv">Attendance CSV Download</a>
-      <a class="btn btn-primary" href="/sectionMeeting/<%= sectionMeetingId %>/csvInSection">Registered Student Attendance CSV Download</a>
+      <a class="btn btn-outline-info" href="/sectionMeeting/<%= sectionMeetingId %>/csv">Attendance CSV Download</a>
+      <a class="btn btn-outline-info" href="/sectionMeeting/<%= sectionMeetingId %>/csvInSection">Registered Student Attendance CSV Download</a>
       <h2>Swiped-in students</h2>
       <ul class="list-group">
-        <% swipes.forEach(function(swipe) { %>
-            <li class="list-group-item"><%= swipe.uin %>    <%= swipe.swipe_timestamp.toUTCString() %></li>
+        <% swipes.forEach(function(swipe, idx) { %>
+            <% if (idx % 2) {%>
+                <li class="list-group-item list-group-item-secondary"><%= swipe.uin %>    <%= swipe.swipe_timestamp.toUTCString() %></li>
+            <% } else {%>
+                <li class="list-group-item list-group-item-dark"><%= swipe.uin %>    <%= swipe.swipe_timestamp.toUTCString() %></li>
+            <% } %>
         <% }) %>
       </ul>
     </div>

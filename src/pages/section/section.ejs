@@ -7,9 +7,9 @@
     <%- include('../partials/header') %>
     <div class="container">
       <h1><%= sectionName %></h1>
-      <form ref='uploadEnrollment' 
-            id='uploadEnrollment' 
-            method='POST' 
+      <form ref='uploadEnrollment'
+            id='uploadEnrollment'
+            method='POST'
             encType="multipart/form-data">
           <input type="hidden" name="__action" value="uploadEnrollment" />
           <input type="hidden" name="sectionName" value="<%= sectionName %>">
@@ -19,18 +19,27 @@
           <label for="enrollmentFile">Choose student enrollment file to upload</label>
           <input id="enrollmentFile" type="file" name="enrollmentFile" />
           <br/>
-          <input class="btn btn-success" type="submit" value="Submit Section Enrollment File"/>
+          <input class="btn btn-outline-success" type="submit" value="Submit Section Enrollment File"/>
       </form>
       <br/>
       <h2>Section - Meetings</h2>
       <ul class="list-group">
-        <% section_meetings.forEach(function(sec_meeting) { %>
+        <% section_meetings.forEach(function(sec_meeting, idx) { %>
+            <% if (idx % 2) {%>
         <a
           href="/sectionMeeting/<%= sec_meeting.id %>"
-          class="list-group-item d-flex justify-content-between align-items-center"
+            class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center"
         >
           <%= sec_meeting.s_name %> - <%= sec_meeting.m_name %>
         </a>
+            <% } else {%>
+        <a
+            href="/sectionMeeting/<%= sec_meeting.id %>"
+            class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center"
+        >
+            <%= sec_meeting.s_name %> - <%= sec_meeting.m_name %>
+        </a>
+            <% } %>
         <% }) %>
       </ul>
     </div>

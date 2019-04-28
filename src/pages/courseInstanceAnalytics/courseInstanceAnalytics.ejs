@@ -24,12 +24,20 @@
 
       <h2>Student Analytics</h2>
       <ul class="list-group">
-      <% students.forEach(function (student) { %>
-        <li class="list-group-item">
-          <a href="/courseInstance/<%= courseInstance.id %>/analytics/student/<%= student.id %>">
+      <% students.forEach(function (student, idx) { %>
+          <% if (idx % 2) {%>
+        <li class="list-group-item list-group-item-secondary">
+            <a href="/courseInstance/<%= courseInstance.id %>/analytics/student/<%= student.id %>">
             <%= student.uin %>
           </a>
         </li>
+          <% } else {%>
+        <li class="list-group-item list-group-item-dark">
+            <a href="/courseInstance/<%= courseInstance.id %>/analytics/student/<%= student.id %>">
+                <%= student.uin %>
+            </a>
+        </li>
+          <% } %>
       <% }) %>
       </ul>
     </div>

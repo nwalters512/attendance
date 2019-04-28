@@ -2,6 +2,8 @@
 <html>
   <head>
     <%- include('../partials/head') %>
+    <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
+
   </head>
   <body>
     <%- include('../partials/header') %>
@@ -9,7 +11,7 @@
       <h1><%= courseDept %> <%= courseNumber %> (<%= courseName %>)</h1>
       <button
           role="button"
-          class="btn btn-primary mb-3"
+          class="btn btn-outline-info mb-3"
           data-toggle="collapse"
           data-target="#newCourseInstance"
           role="button"
@@ -56,13 +58,22 @@
         </div>
       </div>
       <div class="list-group">
-        <% courseInstances.forEach(function(courseInst) { %>
+        <% courseInstances.forEach(function(courseInst, idx) { %>
+        <% if (idx % 2) {%>
         <a
           href="/courseInstance/<%= courseInst.id %>"
-          class="list-group-item d-flex justify-content-between align-items-center"
+            class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center"
         >
           <%= courseInst.name %>
         </a>
+        <% } else {%>
+        <a
+            href="/courseInstance/<%= courseInst.id %>"
+            class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center"
+        >
+            <%= courseInst.name %>
+        </a>
+        <% } %>
         <% }) %>
       </div>
 
@@ -70,39 +81,57 @@
 
     <h2>Course Owners</h2>
       <div class="list-group">
-          <% courseOwners.forEach( (owner) => { %>
-          <div class="list-group-item d-flex justify-content-between align-items-center">
+          <% courseOwners.forEach( (owner, idx) => { %>
+          <% if (idx % 2) {%>
+              <div class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
               <span> <%= owner.email %> (<%= owner.name %>)</span>
 
-          <form method="POST">
+              <form method="POST" style="margin-bottom: 0">
             <input type="hidden" name="__action" value="removeOwner" />
             <input type="hidden" name="email" value=<%= owner.email %> />
-            <button type="submit" class="btn btn-sm btn-outline-danger">
-              <span aria-hidden="true">&times;</span>
+            <button type="submit" class="btn btn-lg btn-outline-danger">
+              &times;
             </button>
           </form>
-          </div>  
+          </div>
+          <% } else {%>
+          <div class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center">
+              <span> <%= owner.email %> (<%= owner.name %>)</span>
+
+              <form method="POST" style="margin-bottom: 0">
+                  <input type="hidden" name="__action" value="removeOwner" />
+                  <input type="hidden" name="email" value=<%= owner.email %> />
+                  <button type="submit" class="btn btn-lg btn-outline-danger">
+                      &times;
+                  </button>
+              </form>
+          </div>
+          <% } %>
           <% }); %>
       </div>
 
       <br/>
 
       <form method="POST">
+          <div class="input-group mb-3">
           <input type="hidden" name="__action" value="addOwner" />
           <input
               name="email"
               id="emailEntry"
+              class="form-control"
+              style="max-width: 320px"
               placeholder="someone@illinois.edu"
               />
+          <div class="input-group-append">
           <button
               role="button"
-              class="btn btn-primary mb-3"
-              type="submit"
-              >
-              <span>Add Owner</span>
+              class="btn btn-primary"
+              type="submit">
+              Add Owner
           </button>
+           </div>
+          </div>
       </form>
-      
     </div>
   </body>
 </html>
