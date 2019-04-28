@@ -8,11 +8,18 @@
     <div class="container">
       <h1>Analytics for student <%= student.uin %></h1>
       <ul class="list-group mb-3">
-      <% meetings.forEach(function (meeting) { %>
-        <li class="list-group-item">
+      <% meetings.forEach(function (meeting, idx) { %>
+          <% if (idx % 2) {%>
+        <li class="list-group-item list-group-item-secondary">
           <%= meeting.name %></br>
           <span class="text-muted small">(attended <%= meeting.student_attendance_count %> times)</span>
         </li>
+          <% } else {%>
+        <li class="list-group-item list-group-item-secondary" style="filter: brightness(110%)">
+            <%= meeting.name %></br>
+            <span class="text-muted small">(attended <%= meeting.student_attendance_count %> times)</span>
+        </li>
+          <% } %>
       <% }) %>
       </ul>
       <p>

@@ -7,11 +7,11 @@
     <%- include('../partials/header') %>
     <div class="container">
       <h1><%= instName %></h1>
-      <a class="btn btn-info" href="/courseInstance/<%= courseInstanceId %>/analytics">Analytics</a>
+      <a class="btn btn-outline-info" href="/courseInstance/<%= courseInstanceId %>/analytics">Analytics</a>
       <h2>Update Roster</h2>
-      <form ref='uploadRoster' 
-            id='uploadRoster' 
-            method='POST' 
+      <form ref='uploadRoster'
+            id='uploadRoster'
+            method='POST'
             encType="multipart/form-data">
         <input type="hidden" name="__action" value="uploadRoster" />
         <input type="hidden" name="courseInstanceTerm" value="<%= instTerm %>">
@@ -20,16 +20,16 @@
         <label for="rosterFile">Choose roster file to upload</label>
         <input id="rosterFile" type="file" name="rosterFile" />
         <br/>
-        <input class="btn btn-success" type="submit" value="Submit Roster File"/>
+        <input class="btn btn-outline-success" type="submit" value="Submit Roster File"/>
       </form>
       <br>
-      <a class="btn btn-info" href=<%= `./${courseInstanceId}/students`%>> Students </a>
+      <a class="btn btn-outline-info" href=<%= `./${courseInstanceId}/students`%>> Students </a>
 
       <br/>
       <h2>Sections</h2>
       <button
         role="button"
-        class="btn btn-primary mb-3"
+        class="btn btn-outline-primary mb-3"
         data-toggle="collapse"
         data-target="#newSection"
         role="button"
@@ -58,19 +58,29 @@
         </div>
       </div>
       <ul class="list-group mb-4">
-        <% sections.forEach(function(section) { %>
+        <% sections.forEach(function(section, idx) { %>
+            <% if (idx % 2) {%>
         <a
           href="/section/<%= section.id %>"
-          class="list-group-item d-flex justify-content-between align-items-center"
+            class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center"
         >
           <%= section.name %>
         </a>
+            <% } else {%>
+        <a
+            href="/section/<%= section.id %>"
+            class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center"
+            style="filter: brightness(110%)"
+        >
+            <%= section.name %>
+        </a>
+            <% } %>
         <% }) %>
       </ul>
       <h2>Meetings</h2>
       <button
         role="button"
-        class="btn btn-primary mb-3"
+        class="btn btn-outline-primary mb-3"
         data-toggle="collapse"
         data-target="#newMeeting"
         role="button"
@@ -95,40 +105,68 @@
         </div>
       </div>
       <ul class="list-group mb-4">
-        <% meetings.forEach(function(meeting) { %>
+        <% meetings.forEach(function(meeting, idx) { %>
+            <% if (idx % 2) {%>
         <a
           href="/meeting/<%= meeting.id %>"
-          class="list-group-item d-flex justify-content-between align-items-center"
+            class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center"
         >
           <%= meeting.name %>
         </a>
+            <% } else {%>
+        <a
+            href="/meeting/<%= meeting.id %>"
+            class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center"
+            style="filter: brightness(110%)"
+        >
+            <%= meeting.name %>
+        </a>
+            <% } %>
         <% }) %>
       </ul>
 
       <h2>Staff</h2>
 
       <div class="list-group">
-          <% courseStaff.forEach( (staff) => { %>
-          <div class="list-group-item d-flex justify-content-between align-items-center">
+          <% courseStaff.forEach( (staff, idx) => { %>
+              <% if (idx % 2) {%>
+                  <div class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
               <span> <%= staff.email %> (<%= staff.name %>)</span>
 
-          <form method="POST">
+              <form method="POST" style="margin-bottom: 0">
             <input type="hidden" name="__action" value="removeStaff" />
             <input type="hidden" name="courseInstanceTerm" value="<%= instTerm %>">
             <input type="hidden" name="courseInstanceName" value="<%= instName %>">
             <input type="hidden" name="courseInstanceYear" value="<%= instYear %>">
             <input type="hidden" name="email" value=<%= staff.email %> />
-            <button type="submit" class="btn btn-sm btn-outline-danger">
-              <span aria-hidden="true">&times;</span>
+            <button type="submit" class="btn btn-lg btn-outline-danger">
+                &times;
             </button>
           </form>
-          </div>  
+          </div>
+              <% } else {%>
+          <div class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center" style="filter: brightness(110%)">
+              <span> <%= staff.email %> (<%= staff.name %>)</span>
+
+              <form method="POST" style="margin-bottom: 0">
+                  <input type="hidden" name="__action" value="removeStaff" />
+                  <input type="hidden" name="courseInstanceTerm" value="<%= instTerm %>">
+                  <input type="hidden" name="courseInstanceName" value="<%= instName %>">
+                  <input type="hidden" name="courseInstanceYear" value="<%= instYear %>">
+                  <input type="hidden" name="email" value=<%= staff.email %> />
+                  <button type="submit" class="btn btn-lg btn-outline-danger">
+                      &times;
+                  </button>
+              </form>
+          </div>
+              <% } %>
           <% }); %>
       </div>
 
       <br/>
 
       <form method="POST">
+          <div class="input-group mb-3">
           <input type="hidden" name="__action" value="addStaff" />
             <input type="hidden" name="courseInstanceTerm" value="<%= instTerm %>">
             <input type="hidden" name="courseInstanceName" value="<%= instName %>">
@@ -136,15 +174,20 @@
           <input
               name="email"
               id="emailEntry"
+              class="form-control"
+              style="max-width: 320px"
               placeholder="someone@illinois.edu"
               />
+          <div class="input-group-append">
           <button
               role="button"
-              class="btn btn-primary mb-3"
+              class="btn btn-primary"
               type="submit"
               >
               <span>Add Staff</span>
           </button>
+          </div>
+          </div>
       </form>
 
     </div>
